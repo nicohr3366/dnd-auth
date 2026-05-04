@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════════════
-   PORTAL D&D — Dark Theme
-   ═══════════════════════════════════════════════ */
+/* PORTAL D&D — Dark Theme */
 
 :root {
     --bg-primary:   #0a0a0f;
@@ -34,12 +32,12 @@ body {
         radial-gradient(ellipse 60% 30% at 50% 100%, rgba(80, 20, 20, 0.15) 0%, transparent 70%);
 }
 
-/* ── Scrollbar ─────────────────────────────── */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
 ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
 
-/* ── Navbar ────────────────────────────────── */
+/* Navbar */
 .navbar {
     background: linear-gradient(180deg, #150800 0%, #0a0500 100%) !important;
     border-bottom: 2px solid var(--gold-dim);
@@ -75,14 +73,14 @@ body {
     background: rgba(212, 175, 55, 0.07);
 }
 
-/* ── Main container ────────────────────────── */
+/* Main container */
 .dnd-container {
     max-width: 1080px;
     margin: 0 auto;
     padding: 0 1.5rem 3rem;
 }
 
-/* ── Card/panel ────────────────────────────── */
+/* Card/panel */
 .dnd-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -102,7 +100,7 @@ body {
 
 .form-page { max-width: 580px; margin: 2rem auto; }
 
-/* ── Page title ─────────────────────────────── */
+/* Page title */
 .dnd-title {
     color: var(--gold);
     font-size: 1.65rem;
@@ -114,7 +112,7 @@ body {
     border-bottom: 1px solid var(--border);
 }
 
-/* ── Action bar ─────────────────────────────── */
+/* Action bar */
 .action-bar {
     display: flex;
     justify-content: space-between;
@@ -124,7 +122,7 @@ body {
     gap: 1rem;
 }
 
-/* ── Tables ─────────────────────────────────── */
+/* Tables */
 .dnd-table {
     width: 100%;
     border-collapse: collapse;
@@ -157,7 +155,7 @@ body {
     color: var(--parchment);
 }
 
-/* ── Role badges ─────────────────────────────── */
+/* Role badges */
 .badge-jugador, .badge-narrador, .badge-administrador {
     display: inline-block;
     padding: 0.25rem 0.75rem;
@@ -172,12 +170,12 @@ body {
 .badge-narrador     { background: #1e0c40; color: #c09af0; border: 1px solid #4a2880; }
 .badge-administrador{ background: #3a0c0c; color: #f0a0a0; border: 1px solid #803030; }
 
-/* ── Status indicators ───────────────────────── */
+/* Status indicators */
 .status-active   { color: #6ee7b7; font-size: 0.8rem; }
 .status-inactive { color: #fca5a5; font-size: 0.8rem; }
 .text-dim        { color: var(--text-dim); }
 
-/* ── Buttons ─────────────────────────────────── */
+/* Buttons */
 .btn-dnd-primary {
     background: linear-gradient(135deg, #4a2e0a 0%, #2d1b06 100%);
     color: var(--gold);
@@ -269,7 +267,7 @@ body {
 }
 .btn-dnd-delete:hover { background: linear-gradient(135deg, #4a2020 0%, #2d1010 100%); color: #ffb0b0; }
 
-/* ── Forms ───────────────────────────────────── */
+/* Forms */
 .form-label {
     color: var(--gold-dim);
     font-size: 0.78rem;
@@ -317,7 +315,7 @@ body {
     flex-wrap: wrap;
 }
 
-/* ── Alerts ──────────────────────────────────── */
+/* Alerts */
 .alert {
     border-radius: 3px;
     font-size: 0.88rem;
@@ -340,7 +338,7 @@ body {
     color: #fde68a;
 }
 
-/* ── Delete confirm box ──────────────────────── */
+/* Delete confirm box */
 .delete-box {
     background: rgba(127, 29, 29, 0.08);
     border: 1px solid rgba(127, 29, 29, 0.25);
@@ -355,7 +353,7 @@ body {
     margin-bottom: 0.25rem;
 }
 
-/* ── Empty state ─────────────────────────────── */
+/* Empty state */
 .empty-state {
     text-align: center;
     padding: 3rem 1rem;
@@ -363,7 +361,7 @@ body {
 }
 .empty-icon { font-size: 2.75rem; margin-bottom: 1rem; opacity: 0.45; }
 
-/* ── Footer ──────────────────────────────────── */
+/* Footer */
 .dnd-footer {
     text-align: center;
     color: var(--text-dim);
@@ -374,7 +372,7 @@ body {
     letter-spacing: 1.5px;
 }
 
-/* ── Responsive ──────────────────────────────── */
+/* Responsive */
 @media (max-width: 768px) {
     .dnd-container { padding: 0 0.875rem 2rem; }
     .dnd-card { padding: 1.25rem 1rem; }

@@ -60,7 +60,7 @@ pip install django==6.0.4 mysqlclient
 
 1. Abrir **XAMPP** → iniciar **Apache** y **MySQL**
 2. Ir a `http://localhost/phpmyadmin`
-3. Crear una base de datos llamada exactamente:
+3. Crear una base de datos llamada:
 
 ```
 dnd_auth_db
@@ -88,12 +88,6 @@ python manage.py runserver
 
 ---
 
-## URLs para mostrar a la profesora
-
-Con el servidor corriendo en `http://127.0.0.1:8000`:
-
-### CRUD 1 — Gestión de Aventureros (Usuarios)
-
 | Acción | URL |
 |--------|-----|
 | **Listar** todos los usuarios | `http://127.0.0.1:8000/usuarios/` |
@@ -101,7 +95,6 @@ Con el servidor corriendo en `http://127.0.0.1:8000`:
 | **Editar** usuario (reemplazar `1` por el ID) | `http://127.0.0.1:8000/usuarios/1/editar/` |
 | **Eliminar** usuario | `http://127.0.0.1:8000/usuarios/1/eliminar/` |
 
-### CRUD 2 — Gestión de Roles
 
 | Acción | URL |
 |--------|-----|
@@ -110,38 +103,10 @@ Con el servidor corriendo en `http://127.0.0.1:8000`:
 | **Editar** rol | `http://127.0.0.1:8000/usuarios/roles/1/editar/` |
 | **Eliminar** rol | `http://127.0.0.1:8000/usuarios/roles/1/eliminar/` |
 
-### Extras
-
 | | URL |
 |-|-----|
 | Página principal (redirige automáticamente) | `http://127.0.0.1:8000/` |
 | Panel de administración Django | `http://127.0.0.1:8000/admin/` |
-
----
-
-## Estructura del proyecto
-
-```
-dnd_auth/
-├── manage.py
-├── dnd_project/           # Configuración principal
-│   ├── settings.py
-│   └── urls.py
-└── usuarios/              # Módulo de usuarios y autenticación
-    ├── models.py          # PerfilUsuario, Rol
-    ├── views.py           # 8 vistas CRUD (función)
-    ├── forms.py           # Formularios con validación
-    ├── urls.py            # Rutas del módulo
-    ├── admin.py           # Modelos registrados en admin
-    ├── templates/
-    │   └── usuarios/
-    │       ├── base.html          # Layout D&D con navbar
-    │       ├── usuarios/          # Templates CRUD usuarios
-    │       └── roles/             # Templates CRUD roles
-    └── static/
-        └── usuarios/css/
-            └── style.css          # Tema oscuro D&D
-```
 
 ---
 
@@ -154,25 +119,6 @@ dnd_auth/
 | Frontend | Bootstrap 5 (CDN) + CSS personalizado |
 | Autenticación | Sistema de auth nativo de Django |
 | Control de versiones | Git |
-
----
-
-## Configuración de la base de datos (`settings.py`)
-
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dnd_auth_db',
-        'USER': 'root',
-        'PASSWORD': '',        # Cambiar si XAMPP tiene contraseña
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
-```
-
-> Si tu instalación de XAMPP tiene contraseña en MySQL, actualiza el campo `PASSWORD` antes de correr las migraciones.
 
 ---
 

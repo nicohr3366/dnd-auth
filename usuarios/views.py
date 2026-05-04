@@ -5,7 +5,7 @@ from .models import PerfilUsuario, Rol
 from .forms import UsuarioCrearForm, UsuarioEditarForm, RolForm
 
 
-# ── USUARIOS ─────────────────────────────────────────────────────────────────
+#USUARIOS
 
 def usuarios_lista(request):
     usuarios = User.objects.select_related('perfil').all().order_by('username')
@@ -70,7 +70,7 @@ def usuario_eliminar(request, pk):
     return render(request, 'usuarios/usuarios/eliminar.html', {'usuario': user})
 
 
-# ── ROLES ─────────────────────────────────────────────────────────────────────
+# ROLES
 
 def roles_lista(request):
     roles = Rol.objects.all().order_by('nombre')
