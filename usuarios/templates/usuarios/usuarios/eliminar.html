@@ -1,0 +1,29 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Eliminar Aventurero{% endblock %}
+
+{% block content %}
+<div class="dnd-card mt-4 form-page" style="border-color: rgba(139,26,26,0.4);">
+    <h1 class="dnd-title" style="color: #f0a0a0;">&#9888; Eliminar Aventurero</h1>
+
+    <div class="delete-box">
+        <p class="text-dim mb-1">Estás a punto de eliminar al aventurero:</p>
+        <p class="entity-name">&#129497; {{ usuario.username }}</p>
+        {% if usuario.email %}
+            <p class="text-dim" style="font-size: 0.85rem; margin-bottom: 0;">{{ usuario.email }}</p>
+        {% endif %}
+    </div>
+
+    <p style="color: #fca5a5; margin-bottom: 1.5rem;">
+        &#9888; Esta acción es permanente e irreversible. El aventurero y todos sus datos serán eliminados.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn-dnd-danger">&#10005; Sí, Eliminar</button>
+            <a href="{% url 'usuarios:lista' %}" class="btn-dnd-secondary">&#8592; Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

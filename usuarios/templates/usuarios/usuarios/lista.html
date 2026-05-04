@@ -1,0 +1,66 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Aventureros{% endblock %}
+
+{% block content %}
+<div class="dnd-card mt-4">
+    <div class="action-bar">
+        <h1 class="dnd-title mb-0">&#129497; Gestión de Aventureros</h1>
+        <a href="{% url 'usuarios:crear' %}" class="btn-dnd-primary">&#10022; Registrar Aventurero</a>
+    </div>
+
+    {% if usuarios %}
+    <div class="table-responsive">
+        <table class="dnd-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td class="text-dim">{{ usuario.pk }}</td>
+                    <td><strong>{{ usuario.username }}</strong></td>
+                    <td class="text-dim">{{ usuario.email|default:"—" }}</td>
+                    <td>
+                        {% if usuario.perfil.rol == 'administrador' %}
+                            <span class="badge-administrador">&#128081; Administrador</span>
+                        {% elif usuario.perfil.rol == 'narrador' %}
+                            <span class="badge-narrador">&#128221; Narrador</span>
+                        {% elif usuario.perfil.rol == 'jugador' %}
+                            <span class="badge-jugador">&#9876;&#65039; Jugador</span>
+                        {% else %}
+                            <span class="text-dim">Sin rol</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if usuario.is_active %}
+                            <span class="status-active">&#9679; Activo</span>
+                        {% else %}
+                            <span class="status-inactive">&#9679; Inactivo</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'usuarios:editar' usuario.pk %}" class="btn-dnd-edit">&#9998; Editar</a>
+                        <a href="{% url 'usuarios:eliminar' usuario.pk %}" class="btn-dnd-delete">&#10005; Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">&#9876;&#65039;</div>
+        <p>No hay aventureros registrados aún.</p>
+        <a href="{% url 'usuarios:crear' %}" class="btn-dnd-primary">Registrar el primer aventurero</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

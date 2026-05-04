@@ -1,0 +1,50 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Roles{% endblock %}
+
+{% block content %}
+<div class="dnd-card mt-4">
+    <div class="action-bar">
+        <h1 class="dnd-title mb-0">&#128737;&#65039; Gestión de Roles</h1>
+        <a href="{% url 'usuarios:rol_crear' %}" class="btn-dnd-primary">&#10022; Crear Rol</a>
+    </div>
+
+    {% if roles %}
+    <div class="table-responsive">
+        <table class="dnd-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Creado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rol in roles %}
+                <tr>
+                    <td class="text-dim">{{ rol.pk }}</td>
+                    <td><strong style="color: var(--gold);">{{ rol.nombre }}</strong></td>
+                    <td class="text-dim">{{ rol.descripcion|truncatechars:80|default:"—" }}</td>
+                    <td class="text-dim" style="font-size: 0.8rem; white-space: nowrap;">
+                        {{ rol.fecha_creacion|date:"d/m/Y" }}
+                    </td>
+                    <td>
+                        <a href="{% url 'usuarios:rol_editar' rol.pk %}" class="btn-dnd-edit">&#9998; Editar</a>
+                        <a href="{% url 'usuarios:rol_eliminar' rol.pk %}" class="btn-dnd-delete">&#10005; Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">&#128737;&#65039;</div>
+        <p>No hay roles personalizados creados aún.</p>
+        <a href="{% url 'usuarios:rol_crear' %}" class="btn-dnd-primary">Crear el primer rol</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
