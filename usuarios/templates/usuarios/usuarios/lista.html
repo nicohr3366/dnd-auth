@@ -29,12 +29,18 @@
                     <td><strong>{{ usuario.username }}</strong></td>
                     <td class="text-dim">{{ usuario.email|default:"—" }}</td>
                     <td>
-                        {% if usuario.perfil.rol == 'administrador' %}
-                            <span class="badge-administrador">&#128081; Administrador</span>
-                        {% elif usuario.perfil.rol == 'narrador' %}
-                            <span class="badge-narrador">&#128221; Narrador</span>
-                        {% elif usuario.perfil.rol == 'jugador' %}
-                            <span class="badge-jugador">&#9876;&#65039; Jugador</span>
+                        {% if usuario.perfil.rol %}
+                            {% with nombre=usuario.perfil.rol.nombre|lower %}
+                                {% if nombre == 'administrador' %}
+                                    <span class="badge-administrador">&#128081; {{ usuario.perfil.rol.nombre }}</span>
+                                {% elif nombre == 'narrador' %}
+                                    <span class="badge-narrador">&#128221; {{ usuario.perfil.rol.nombre }}</span>
+                                {% elif nombre == 'jugador' %}
+                                    <span class="badge-jugador">&#9876;&#65039; {{ usuario.perfil.rol.nombre }}</span>
+                                {% else %}
+                                    <span class="badge-jugador">{{ usuario.perfil.rol.nombre }}</span>
+                                {% endif %}
+                            {% endwith %}
                         {% else %}
                             <span class="text-dim">Sin rol</span>
                         {% endif %}

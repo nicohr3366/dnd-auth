@@ -44,8 +44,9 @@ def usuario_editar(request, pk):
             if form.cleaned_data['password']:
                 user.set_password(form.cleaned_data['password'])
             user.save()
-            perfil.rol = form.cleaned_data['rol']
-            perfil.save()
+            if form.cleaned_data['rol']:
+                perfil.rol = form.cleaned_data['rol']
+                perfil.save()
             messages.success(request, f'Aventurero "{user.username}" actualizado correctamente.')
             return redirect('usuarios:lista')
     else:

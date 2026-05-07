@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import PerfilUsuario, Rol
+from .models import Rol
 
 
 class UsuarioCrearForm(forms.Form):
@@ -13,8 +13,8 @@ class UsuarioCrearForm(forms.Form):
         label='Correo electrónico',
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'correo@ejemplo.com'}),
     )
-    rol = forms.ChoiceField(
-        choices=PerfilUsuario.ROL_CHOICES,
+    rol = forms.ModelChoiceField(
+        queryset=Rol.objects.all(),
         label='Rol',
         widget=forms.Select(attrs={'class': 'form-select'}),
     )
@@ -52,9 +52,11 @@ class UsuarioEditarForm(forms.Form):
         label='Correo electrónico',
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
     )
-    rol = forms.ChoiceField(
-        choices=PerfilUsuario.ROL_CHOICES,
+    rol = forms.ModelChoiceField(
+        queryset=Rol.objects.all(),
         label='Rol',
+        empty_label='Dejar vacío para no cambiar',
+        required=False,
         widget=forms.Select(attrs={'class': 'form-select'}),
     )
     password = forms.CharField(

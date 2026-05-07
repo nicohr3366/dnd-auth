@@ -17,17 +17,13 @@ class Rol(models.Model):
 
 
 class PerfilUsuario(models.Model):
-    ROL_CHOICES = [
-        ('jugador', 'Jugador'),
-        ('narrador', 'Narrador'),
-        ('administrador', 'Administrador'),
-    ]
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
-    rol = models.CharField(max_length=20, choices=ROL_CHOICES, default='jugador')
+    rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True, related_name='perfiles')
 
     class Meta:
         verbose_name = 'Perfil de Usuario'
         verbose_name_plural = 'Perfiles de Usuario'
 
     def __str__(self):
-        return f"{self.usuario.username} ({self.get_rol_display()})"
+        rol_nombre = self.rol.nombre if self.rol else 'Sin rol'
+        return f"{self.usuario.username} ({rol_nombre})"
