@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(pattern_name='usuarios:lista'), name='home'),
     path('usuarios/', include('usuarios.urls')),
+    path('gestion_personajes/', include('gestion_personajes.urls')),
+
 ]
