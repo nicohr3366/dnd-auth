@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RPG - Gestión</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body>
+    <header class="hero">
+        <div class="container hero-inner">
+            <h1 class="hero-title">Gestion de Personajes - Modulo de personajes</h1>
+            <p class="hero-subtitle">Forja, administra y evoluciona clases para tus heroes y aventuras.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container footer-inner">&copy; Proyecto RPG - Gestion colaborativa de Calabozos y Dragones</div>
+    </footer>
+</body>
+</html>

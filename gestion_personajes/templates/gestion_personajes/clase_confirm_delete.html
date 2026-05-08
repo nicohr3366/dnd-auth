@@ -1,0 +1,17 @@
+{% extends 'gestion_personajes/base.html' %}
+
+{% block content %}
+<section class="panel">
+  <h2>Eliminar Clase</h2>
+  <div class="warning-box">
+    Esta accion eliminara de forma permanente la clase <strong>{{ clase.nombre }}</strong>.
+  </div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-actions">
+      <button class="btn btn-danger" type="submit">Si, eliminar</button>
+      <a class="btn btn-neutral" href="{% url 'gestion_personajes:clase_list' %}">Cancelar</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

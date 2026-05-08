@@ -1,0 +1,70 @@
+{% extends "razas/base.html" %}
+
+{% block title %}Razas - Gestión RPG{% endblock %}
+{% block hero_subtitle %}Descubre y gestiona todas las razas disponibles para tus aventuras{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <div class="title-row">
+        <h2>Catálogo de Razas</h2>
+        <a href="{% url 'gestion_personajes:crear_raza' %}" class="btn btn-primary"> Crear Nueva Raza</a>
+    </div>
+
+    {% if razas %}
+        <div class="razas-grid">
+            {% for raza in razas %}
+                <div class="raza-card">
+                    <h3 class="raza-card-title">{{ raza.nombre }}</h3>
+                    
+                    {% if raza.descripcion %}
+                        <p class="raza-card-desc">{{ raza.descripcion }}</p>
+                    {% else %}
+                        <p class="raza-card-desc" style="color: #9b8b7e; font-style: italic;">Sin descripción</p>
+                    {% endif %}
+
+                    <div style="margin-bottom: 1rem;">
+                        <strong style="color: var(--ink); display: block; margin-bottom: 0.6rem;">Bonos de Atributos:</strong>
+                        <div>
+                            {% if raza.bono_fuerza != 0 %}
+                                <span class="stat-badge">Fuerza +{{ raza.bono_fuerza }}</span>
+                            {% endif %}
+                            {% if raza.bono_destreza != 0 %}
+                                <span class="stat-badge">Destreza +{{ raza.bono_destreza }}</span>
+                            {% endif %}
+                            {% if raza.bono_constitucion != 0 %}
+                                <span class="stat-badge">Constitución +{{ raza.bono_constitucion }}</span>
+                            {% endif %}
+                            {% if raza.bono_inteligencia != 0 %}
+                                <span class="stat-badge">Inteligencia +{{ raza.bono_inteligencia }}</span>
+                            {% endif %}
+                            {% if raza.bono_sabiduria != 0 %}
+                                <span class="stat-badge">Sabiduría +{{ raza.bono_sabiduria }}</span>
+                            {% endif %}
+                            {% if raza.bono_carisma != 0 %}
+                                <span class="stat-badge">Carisma +{{ raza.bono_carisma }}</span>
+                            {% endif %}
+                        </div>
+                        {% if raza.bono_fuerza == 0 and raza.bono_destreza == 0 and raza.bono_constitucion == 0 and raza.bono_inteligencia == 0 and raza.bono_sabiduria == 0 and raza.bono_carisma == 0 %}
+                            <p style="color: #9b8b7e; font-size: 0.9rem; margin-top: 0.5rem;">Sin bonos especiales</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-actions">
+                        <a href="{% url 'gestion_personajes:editar_raza' raza.id_raza %}" class="btn btn-primary btn-sm">✏️ Editar</a>
+                        <a href="{% url 'gestion_personajes:eliminar_raza' raza.id_raza %}" class="btn btn-danger btn-sm">🗑️ Eliminar</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">🏜️</div>
+            <h3>No hay razas registradas</h3>
+            <p>Comienza creando una nueva raza para tu mundo RPG.</p>
+            <div style="margin-top: 1.5rem;">
+                <a href="{% url 'gestion_personajes:crear_raza' %}" class="btn btn-primary">Crear Primera Raza</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
