@@ -5,9 +5,9 @@ SQL_CREATE_MISSING_TABLES = """
 CREATE TABLE IF NOT EXISTS usuario_rol (
     id_usuario_rol INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    id_rol INT NOT NULL,
+    id_rol BIGINT NOT NULL,
     CONSTRAINT fk_usuario_rol_user FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
-    CONSTRAINT fk_usuario_rol_rol FOREIGN KEY (id_rol) REFERENCES rol(id_rol) ON DELETE CASCADE,
+    CONSTRAINT fk_usuario_rol_rol FOREIGN KEY (id_rol) REFERENCES usuarios_rol(id) ON DELETE CASCADE,
     UNIQUE KEY uq_usuario_rol (user_id, id_rol)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -105,10 +105,10 @@ CREATE TABLE IF NOT EXISTS turno (
     id_turno INT AUTO_INCREMENT PRIMARY KEY,
     orden_turno INT NOT NULL,
     id_combate INT NOT NULL,
-    id_personaje BIGINT NULL,
+    id_personaje INT NULL,
     id_npc INT NULL,
     CONSTRAINT fk_turno_combate FOREIGN KEY (id_combate) REFERENCES combate(id_combate) ON DELETE CASCADE,
-    CONSTRAINT fk_turno_personaje FOREIGN KEY (id_personaje) REFERENCES personaje(id) ON DELETE CASCADE,
+    CONSTRAINT fk_turno_personaje FOREIGN KEY (id_personaje) REFERENCES personaje(id_personaje) ON DELETE CASCADE,
     CONSTRAINT fk_turno_npc FOREIGN KEY (id_npc) REFERENCES npc(id_npc) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS accion_combate (
     CONSTRAINT fk_accion_turno FOREIGN KEY (id_turno) REFERENCES turno(id_turno) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT IGNORE INTO rol(nombre) VALUES
+INSERT IGNORE INTO usuarios_rol(nombre) VALUES
 ('Administrador'),
 ('Jugador'),
 ('Narrador');
@@ -141,6 +141,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('gestion_personajes', '0001_initial'),
+        ('usuarios', '0001_initial'),
     ]
 
     operations = [
