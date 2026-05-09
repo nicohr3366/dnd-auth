@@ -1,0 +1,16 @@
+{% extends 'gestion_personajes/base.html' %}
+
+{% block content %}
+<div class="panel">
+    <h2>Confirmar eliminación</h2>
+    <p>¿Deseas eliminar a <strong>{{ personaje.nombre }}</strong>?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            <a href="{% url 'gestion_personajes:personaje_list' %}" class="btn btn-neutral">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

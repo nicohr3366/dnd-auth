@@ -1,0 +1,31 @@
+{% extends 'gestion_personajes/base.html' %}
+
+{% block content %}
+<div class="panel">
+    <div class="title-row">
+        <h2>{{ personaje.nombre }}</h2>
+        <div>
+            <a href="{% url 'gestion_personajes:personaje_update' personaje.id_personaje %}" class="btn btn-success">Editar</a>
+            <a href="{% url 'gestion_personajes:personaje_delete' personaje.id_personaje %}" class="btn btn-danger">Eliminar</a>
+        </div>
+    </div>
+
+    <div class="personaje-info">
+        <p><strong>Nivel:</strong> {{ personaje.nivel }}</p>
+        <p><strong>Experiencia:</strong> {{ personaje.experiencia }}</p>
+        <p><strong>Raza:</strong> {{ personaje.raza.nombre }}</p>
+        <p><strong>Clase:</strong> {{ personaje.clase.nombre }}</p>
+        <p><strong>Vida:</strong> {{ personaje.vida_actual }} / {{ personaje.vida_maxima }}</p>
+    </div>
+
+    <div class="atributos-grid">
+        <div class="atributo"><label>Fuerza</label><p>{{ personaje.fuerza }}</p></div>
+        <div class="atributo"><label>Destreza</label><p>{{ personaje.destreza }}</p></div>
+        <div class="atributo"><label>Constitución</label><p>{{ personaje.constitucion }}</p></div>
+        <div class="atributo"><label>Inteligencia</label><p>{{ personaje.inteligencia }}</p></div>
+        <div class="atributo"><label>Sabiduría</label><p>{{ personaje.sabiduria }}</p></div>
+        <div class="atributo"><label>Carisma</label><p>{{ personaje.carisma }}</p></div>
+    </div>
+
+</div>
+{% endblock %}

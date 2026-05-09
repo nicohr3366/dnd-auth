@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'usuarios',
+    'gestion_personajes',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,7 @@ WSGI_APPLICATION = 'dnd_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dnd_auth_db',
+        'NAME': 'rpg_platform',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',

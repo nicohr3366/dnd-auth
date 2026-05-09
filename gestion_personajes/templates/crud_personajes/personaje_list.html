@@ -1,0 +1,53 @@
+{% extends 'gestion_personajes/base.html' %}
+
+{% block content %}
+<div class="panel">
+    <div class="title-row">
+        <h2>Gestión de Personajes</h2>
+        <a href="{% url 'gestion_personajes:personaje_create' %}" class="btn btn-primary">Crear Personaje</a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="table-wrap">
+        {% if personajes %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Nivel</th>
+                        <th>Raza</th>
+                        <th>Clase</th>
+                        <th>Vida</th>
+                        <th>Jugador</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for personaje in personajes %}
+                        <tr>
+                            <td>{{ personaje.nombre }}</td>
+                            <td>{{ personaje.nivel }}</td>
+                            <td>{{ personaje.raza.nombre }}</td>
+                            <td>{{ personaje.clase.nombre }}</td>
+                            <td>{{ personaje.vida_actual }}/{{ personaje.vida_maxima }}</td>
+                            <td>{{ personaje.user.username }}</td>
+                            <td>
+                                <a href="{% url 'gestion_personajes:personaje_detail' personaje.id_personaje %}" class="btn btn-neutral">Ver</a>
+                                <a href="{% url 'gestion_personajes:personaje_update' personaje.id_personaje %}" class="btn btn-success">Editar</a>
+                                <a href="{% url 'gestion_personajes:personaje_delete' personaje.id_personaje %}" class="btn btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-cell">No hay personajes creados.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
