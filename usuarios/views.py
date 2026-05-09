@@ -1,17 +1,50 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import DatabaseError
+from django.shortcuts import get_object_or_404, redirect, render
+
+from gestion_personajes.models import Clase, Personaje, Raza
+
+from .forms import RolForm, UsuarioCrearForm, UsuarioEditarForm
 from .models import PerfilUsuario, Rol
-from .forms import UsuarioCrearForm, UsuarioEditarForm, RolForm
 
 
-#USUARIOS
+@login_required
+def dashboard(request):
+    def safe_count(model):
+        try:
+            return model.objects.count()
+        except DatabaseError:
+            return 0
 
+    rol_actual = 'Sin rol'
+    try:
+        perfil = request.user.perfil
+    except (DatabaseError, AttributeError):
+        perfil = None
+    if perfil and perfil.rol:
+        rol_actual = perfil.rol.nombre
+    elif request.user.is_superuser:
+        rol_actual = 'Administrador'
+    contexto = {
+        'total_usuarios': safe_count(User),
+        'total_roles': safe_count(Rol),
+        'total_clases': safe_count(Clase),
+        'total_razas': safe_count(Raza),
+        'total_personajes': safe_count(Personaje),
+        'rol_actual': rol_actual,
+    }
+    return render(request, 'usuarios/dashboard.html', contexto)
+
+
+@login_required
 def usuarios_lista(request):
     usuarios = User.objects.select_related('perfil').all().order_by('username')
     return render(request, 'usuarios/usuarios/lista.html', {'usuarios': usuarios})
 
 
+@login_required
 def usuario_crear(request):
     if request.method == 'POST':
         form = UsuarioCrearForm(request.POST)
@@ -32,6 +65,7 @@ def usuario_crear(request):
     return render(request, 'usuarios/usuarios/crear.html', {'form': form})
 
 
+@login_required
 def usuario_editar(request, pk):
     user = get_object_or_404(User, pk=pk)
     perfil, _ = PerfilUsuario.objects.get_or_create(usuario=user)
@@ -61,6 +95,7 @@ def usuario_editar(request, pk):
     return render(request, 'usuarios/usuarios/editar.html', {'form': form, 'usuario': user})
 
 
+@login_required
 def usuario_eliminar(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
@@ -71,13 +106,13 @@ def usuario_eliminar(request, pk):
     return render(request, 'usuarios/usuarios/eliminar.html', {'usuario': user})
 
 
-# ROLES
-
+@login_required
 def roles_lista(request):
     roles = Rol.objects.all().order_by('nombre')
     return render(request, 'usuarios/roles/lista.html', {'roles': roles})
 
 
+@login_required
 def rol_crear(request):
     if request.method == 'POST':
         form = RolForm(request.POST)
@@ -90,6 +125,7 @@ def rol_crear(request):
     return render(request, 'usuarios/roles/crear.html', {'form': form})
 
 
+@login_required
 def rol_editar(request, pk):
     rol = get_object_or_404(Rol, pk=pk)
     if request.method == 'POST':
@@ -103,6 +139,7 @@ def rol_editar(request, pk):
     return render(request, 'usuarios/roles/editar.html', {'form': form, 'rol': rol})
 
 
+@login_required
 def rol_eliminar(request, pk):
     rol = get_object_or_404(Rol, pk=pk)
     if request.method == 'POST':
