@@ -6,6 +6,8 @@ app_name = 'usuarios'
 urlpatterns = [
     # Usuarios
     path('', views.usuarios_lista, name='lista'),
+    path('dashboard/', views.usuarios_dashboard, name='dashboard'),
+    path('<int:pk>/', views.usuario_detalle, name='detalle'),
     path('crear/', views.usuario_crear, name='crear'),
     path('registro/', views.usuario_crear, name='registro'),
     path('<int:pk>/editar/', views.usuario_editar, name='editar'),

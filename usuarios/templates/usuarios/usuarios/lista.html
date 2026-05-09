@@ -6,7 +6,10 @@
 <div class="dnd-card mt-4">
     <div class="action-bar">
         <h1 class="dnd-title mb-0">&#129497; Gestión de Aventureros</h1>
-        <a href="{% url 'usuarios:crear' %}" class="btn-dnd-primary">&#10022; Registrar Aventurero</a>
+        <div>
+            <a href="{% url 'usuarios:dashboard' %}" class="btn-dnd-primary">Ver usuarios registrados</a>
+            <a href="{% url 'usuarios:crear' %}" class="btn-dnd-primary">&#10022; Registrar Aventurero</a>
+        </div>
     </div>
 
     {% if usuarios %}
@@ -26,7 +29,7 @@
                 {% for usuario in usuarios %}
                 <tr>
                     <td class="text-dim">{{ usuario.pk }}</td>
-                    <td><strong>{{ usuario.username }}</strong></td>
+                    <td><strong><a href="{% url 'usuarios:detalle' usuario.pk %}">{{ usuario.username }}</a></strong></td>
                     <td class="text-dim">{{ usuario.email|default:"—" }}</td>
                     <td>
                         {% if usuario.perfil.rol %}

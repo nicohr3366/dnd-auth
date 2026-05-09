@@ -1,0 +1,51 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Dashboard de Usuarios{% endblock %}
+
+{% block content %}
+<div class="dnd-card mt-4">
+    <div class="action-bar">
+        <h1 class="dnd-title mb-0">&#128100; Dashboard de Usuarios</h1>
+        <a href="{% url 'usuarios:lista' %}" class="btn-dnd-primary">Volver a la lista</a>
+    </div>
+
+    {% if resumen %}
+    <div class="table-responsive">
+        <table class="dnd-table">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Personajes</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in resumen %}
+                <tr>
+                    <td><a href="{% url 'usuarios:detalle' item.usuario.pk %}"><strong>{{ item.usuario.username }}</strong></a></td>
+                    <td>
+                        {% if item.rol_nombre == 'Administrador' %}
+                            <span class="badge-administrador">&#128081; {{ item.rol_nombre }}</span>
+                        {% elif item.rol_nombre == 'Narrador' %}
+                            <span class="badge-narrador">&#128221; {{ item.rol_nombre }}</span>
+                        {% elif item.rol_nombre == 'Jugador' %}
+                            <span class="badge-jugador">&#9876;&#65039; {{ item.rol_nombre }}</span>
+                        {% else %}
+                            <span class="text-dim">{{ item.rol_nombre }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.total_personajes }}</td>
+                    <td><a href="{% url 'usuarios:detalle' item.usuario.pk %}" class="btn-dnd-edit">Ver detalle</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No hay usuarios registrados.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

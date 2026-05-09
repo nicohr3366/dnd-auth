@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
+from gestion_personajes.models import Personaje
 from .models import PerfilUsuario, Rol
 from .forms import UsuarioCrearForm, UsuarioEditarForm, RolForm
 
@@ -10,6 +11,34 @@ from .forms import UsuarioCrearForm, UsuarioEditarForm, RolForm
 def usuarios_lista(request):
     usuarios = User.objects.select_related('perfil').all().order_by('username')
     return render(request, 'usuarios/usuarios/lista.html', {'usuarios': usuarios})
+
+
+def usuarios_dashboard(request):
+    usuarios = User.objects.select_related('perfil').all().order_by('username')
+    resumen = []
+    for usuario in usuarios:
+        perfil = getattr(usuario, 'perfil', None)
+        rol_nombre = perfil.rol.nombre if (perfil and perfil.rol) else 'Sin rol'
+        personajes = Personaje.objects.filter(user=usuario).select_related('raza', 'clase').order_by('nombre')
+        resumen.append({
+            'usuario': usuario,
+            'rol_nombre': rol_nombre,
+            'personajes': personajes,
+            'total_personajes': personajes.count(),
+        })
+    return render(request, 'usuarios/usuarios/dashboard.html', {'resumen': resumen})
+
+
+def usuario_detalle(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+    perfil = getattr(usuario, 'perfil', None)
+    rol_nombre = perfil.rol.nombre if (perfil and perfil.rol) else 'Sin rol'
+    personajes = Personaje.objects.filter(user=usuario).select_related('raza', 'clase').order_by('nombre')
+    return render(request, 'usuarios/usuarios/detalle.html', {
+        'usuario': usuario,
+        'rol_nombre': rol_nombre,
+        'personajes': personajes,
+    })
 
 
 def usuario_crear(request):

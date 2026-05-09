@@ -1,4 +1,4 @@
-from django.urls import path
+﻿from django.urls import path
 from . import views
 
 app_name = 'gestion_personajes'
@@ -24,4 +24,6 @@ urlpatterns = [
     path('razas/crear/', views.crear_raza, name='crear_raza'),
     path('razas/editar/<int:id>/', views.editar_raza, name='editar_raza'),
     path('razas/eliminar/<int:id>/', views.eliminar_raza, name='eliminar_raza'),
+    # DASHBOARD / PÁGINA INICIO
+    path('inicio/', views.dashboard, name='dashboard'),
 ]
