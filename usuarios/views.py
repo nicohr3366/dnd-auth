@@ -10,6 +10,27 @@ from .forms import RolForm, UsuarioCrearForm, UsuarioEditarForm
 from .models import PerfilUsuario, Rol
 
 
+def registro(request):
+    if request.user.is_authenticated:
+        return redirect('usuarios:dashboard')
+    if request.method == 'POST':
+        form = UsuarioCrearForm(request.POST)
+        if form.is_valid():
+            user = User.objects.create_user(
+                username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password'],
+            )
+            rol = form.cleaned_data['rol']
+            PerfilUsuario.objects.create(usuario=user, rol=rol)
+            messages.success(request, f'Cuenta creada. Ya puedes iniciar sesión, {user.username}.')
+            return redirect('usuarios:login')
+    else:
+        form = UsuarioCrearForm()
+    form.fields['rol'].queryset = Rol.objects.exclude(nombre='Administrador')
+    return render(request, 'usuarios/auth/registro.html', {'form': form})
+
+
 @login_required
 def dashboard(request):
     def safe_count(model):
