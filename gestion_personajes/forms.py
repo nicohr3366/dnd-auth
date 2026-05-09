@@ -1,4 +1,4 @@
-from django import forms
+﻿from django import forms
 from .models import Clase, Personaje, Raza
 
 
@@ -34,6 +34,7 @@ class PersonajeForm(forms.ModelForm):
             'raza': forms.Select(attrs={'class': 'form-control'}),
             'clase': forms.Select(attrs={'class': 'form-control'}),
         }
+
 
 class RazaForm(forms.ModelForm):
     class Meta:

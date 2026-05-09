@@ -1,0 +1,55 @@
+{% extends 'gestion_personajes/base.html' %}
+
+{% block content %}
+<div class="panel">
+    <div class="title-row">
+        <h2>Inicio</h2>
+        <p class="muted">Bienvenido, {{ request.user.username }} - Rol: <strong>{{ rol_nombre }}</strong></p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="card">
+            <h3>Tus personajes ({{ total_personajes }})</h3>
+            {% if user_personajes %}
+                <ul class="list-unstyled">
+                    {% for p in user_personajes %}
+                        <li>
+                            <a href="{% url 'gestion_personajes:personaje_detail' p.id_personaje %}">{{ p.nombre }}</a>
+                            <span class="muted">— Nivel {{ p.nivel }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No tienes personajes aún. <a href="{% url 'gestion_personajes:personaje_create' %}">Crear uno</a></p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3>Estadísticas por Clase</h3>
+            {% if class_stats %}
+                <ul class="list-unstyled">
+                    {% for c in class_stats %}
+                        <li>{{ c.nombre }} — {{ c.count }} personajes</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay clases registradas.</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3>Estadísticas por Raza</h3>
+            {% if raza_stats %}
+                <ul class="list-unstyled">
+                    {% for r in raza_stats %}
+                        <li>{{ r.nombre }} — {{ r.count }} personajes</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay razas registradas.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Detalle de Usuario{% endblock %}
+
+{% block content %}
+<div class="dnd-card mt-4">
+    <div class="action-bar">
+        <h1 class="dnd-title mb-0">Detalle de Aventurero</h1>
+        <a href="{% url 'usuarios:dashboard' %}" class="btn-dnd-primary">Volver al dashboard</a>
+    </div>
+
+    <div class="empty-state" style="text-align:left;">
+        <p><strong>Usuario:</strong> {{ usuario.username }}</p>
+        <p><strong>Correo:</strong> {{ usuario.email|default:'—' }}</p>
+        <p><strong>Rol:</strong> {{ rol_nombre }}</p>
+        <p><strong>Estado:</strong> {% if usuario.is_active %}Activo{% else %}Inactivo{% endif %}</p>
+    </div>
+
+    <h2 class="dnd-title mt-4">Personajes del usuario</h2>
+    {% if personajes %}
+    <div class="table-responsive">
+        <table class="dnd-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Nivel</th>
+                    <th>Raza</th>
+                    <th>Clase</th>
+                    <th>Vida</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for personaje in personajes %}
+                <tr>
+                    <td><a href="{% url 'gestion_personajes:personaje_detail' personaje.id_personaje %}"><strong>{{ personaje.nombre }}</strong></a></td>
+                    <td>{{ personaje.nivel }}</td>
+                    <td>{{ personaje.raza.nombre }}</td>
+                    <td>{{ personaje.clase.nombre }}</td>
+                    <td>{{ personaje.vida_actual }}/{{ personaje.vida_maxima }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>Este usuario no tiene personajes registrados.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

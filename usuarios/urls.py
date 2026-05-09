@@ -1,19 +1,25 @@
-from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.urls import path
+
 from . import views
 from .forms import PortalAuthenticationForm
 
 app_name = 'usuarios'
 
 urlpatterns = [
-    path('registro/', views.registro, name='registro_publico'),
-    path('login/', auth_views.LoginView.as_view(template_name='usuarios/auth/login.html', authentication_form=PortalAuthenticationForm, redirect_authenticated_user=True), name='login'),
+    path('login/', auth_views.LoginView.as_view(
+        template_name='usuarios/auth/login.html',
+        authentication_form=PortalAuthenticationForm,
+        redirect_authenticated_user=True,
+    ), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='usuarios:login'), name='logout'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('registro/', views.registro, name='registro_publico'),
     # Usuarios
     path('', views.usuarios_lista, name='lista'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('usuarios-dashboard/', views.usuarios_dashboard, name='usuarios_dashboard'),
+    path('<int:pk>/', views.usuario_detalle, name='detalle'),
     path('crear/', views.usuario_crear, name='crear'),
-    path('registro/', views.usuario_crear, name='registro'),
     path('<int:pk>/editar/', views.usuario_editar, name='editar'),
     path('<int:pk>/eliminar/', views.usuario_eliminar, name='eliminar'),
     # Roles

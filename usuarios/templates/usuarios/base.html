@@ -14,46 +14,30 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid px-4">
         <a class="navbar-brand" href="{% url 'usuarios:dashboard' %}">&#9876;&#65039; PORTAL D&amp;D</a>
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
-                aria-controls="navMenu" aria-expanded="false">
-            <span style="color: var(--gold); font-size: 1.4rem;">&#9776;</span>
-        </button>
-        <div class="collapse navbar-collapse" id="navMenu">
+        <div class="navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto align-items-center gap-1">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
-                           href="{% url 'usuarios:dashboard' %}">
-                            &#9876;&#65039; Dashboard
-                        </a>
+                           href="{% url 'usuarios:dashboard' %}">&#9876;&#65039; Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'lista' %}active{% endif %}"
-                           href="{% url 'usuarios:lista' %}">
-                            &#129497; Aventureros
-                        </a>
+                           href="{% url 'usuarios:lista' %}">&#129497; Aventureros</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if 'rol' in request.resolver_match.url_name %}active{% endif %}"
-                           href="{% url 'usuarios:roles_lista' %}">
-                            &#128737;&#65039; Roles
-                        </a>
+                           href="{% url 'usuarios:roles_lista' %}">&#128737;&#65039; Roles</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if 'personaje' in request.resolver_match.url_name %}active{% endif %}"
-                           href="{% url 'gestion_personajes:personaje_list' %}">
-                            &#128737;&#65039; Personajes
-                        </a>
+                           href="{% url 'gestion_personajes:personaje_list' %}">&#128100; Personajes</a>
                     </li>
                     <li class="nav-item nav-auth-item">
                         <form method="post" action="{% url 'usuarios:logout' %}" class="nav-logout-form">
                             {% csrf_token %}
                             <button type="submit" class="nav-logout-btn">Salir</button>
                         </form>
-                    </li>
-                {% else %}
-                    <li class="nav-item nav-auth-item">
-                        <a class="nav-login-btn" href="{% url 'usuarios:login' %}">Ingresar</a>
                     </li>
                 {% endif %}
             </ul>

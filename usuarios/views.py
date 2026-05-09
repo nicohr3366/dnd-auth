@@ -59,10 +59,42 @@ def dashboard(request):
     return render(request, 'usuarios/dashboard.html', contexto)
 
 
+# USUARIOS
+
 @login_required
 def usuarios_lista(request):
     usuarios = User.objects.select_related('perfil').all().order_by('username')
     return render(request, 'usuarios/usuarios/lista.html', {'usuarios': usuarios})
+
+
+@login_required
+def usuarios_dashboard(request):
+    usuarios = User.objects.select_related('perfil').all().order_by('username')
+    resumen = []
+    for usuario in usuarios:
+        perfil = getattr(usuario, 'perfil', None)
+        rol_nombre = perfil.rol.nombre if (perfil and perfil.rol) else 'Sin rol'
+        personajes = Personaje.objects.filter(user=usuario).select_related('raza', 'clase').order_by('nombre')
+        resumen.append({
+            'usuario': usuario,
+            'rol_nombre': rol_nombre,
+            'personajes': personajes,
+            'total_personajes': personajes.count(),
+        })
+    return render(request, 'usuarios/usuarios/dashboard.html', {'resumen': resumen})
+
+
+@login_required
+def usuario_detalle(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+    perfil = getattr(usuario, 'perfil', None)
+    rol_nombre = perfil.rol.nombre if (perfil and perfil.rol) else 'Sin rol'
+    personajes = Personaje.objects.filter(user=usuario).select_related('raza', 'clase').order_by('nombre')
+    return render(request, 'usuarios/usuarios/detalle.html', {
+        'usuario': usuario,
+        'rol_nombre': rol_nombre,
+        'personajes': personajes,
+    })
 
 
 @login_required
@@ -126,6 +158,8 @@ def usuario_eliminar(request, pk):
         return redirect('usuarios:lista')
     return render(request, 'usuarios/usuarios/eliminar.html', {'usuario': user})
 
+
+# ROLES
 
 @login_required
 def roles_lista(request):

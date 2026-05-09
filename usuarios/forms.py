@@ -80,6 +80,24 @@ class UsuarioEditarForm(forms.Form):
         return username
 
 
+class PortalAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(
+        label='Usuario',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu usuario',
+            'autofocus': True,
+        }),
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu contraseña',
+        }),
+    )
+
+
 class RolForm(forms.ModelForm):
     class Meta:
         model = Rol
