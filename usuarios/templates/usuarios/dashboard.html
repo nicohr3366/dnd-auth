@@ -1,0 +1,57 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="dashboard-hero">
+    <div class="dashboard-banner">
+        <div class="dashboard-kicker">Centro de control</div>
+        <h1 class="dashboard-title">Bienvenido, {{ request.user.username }}</h1>
+        <p class="dashboard-text">
+            Este es el tablero principal del sistema. Desde aquí puedes entrar a la gestión de aventureros,
+            roles, personajes, clases y razas sin perder el orden del proyecto.
+        </p>
+
+        <div class="dashboard-actions">
+            <a class="btn btn-primary" href="{% url 'usuarios:lista' %}">Aventureros</a>
+            <a class="btn btn-success" href="{% url 'gestion_personajes:personaje_list' %}">Personajes</a>
+            <a class="btn btn-neutral" href="{% url 'usuarios:roles_lista' %}">Roles</a>
+            <a class="btn btn-neutral" href="{% url 'gestion_personajes:clase_list' %}">Clases</a>
+        </div>
+    </div>
+
+    <div class="dashboard-side">
+        <div>
+            <div class="dashboard-kicker">Estado actual</div>
+            <h2>Rol asignado</h2>
+            <p class="dashboard-note">{{ rol_actual }}</p>
+        </div>
+        <div class="dashboard-note">
+            El acceso queda protegido por login, y al cerrar sesión vuelves directamente a la pantalla de ingreso.
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <article class="metric-card">
+        <div class="metric-value">{{ total_usuarios }}</div>
+        <div class="metric-label">Usuarios</div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-value">{{ total_roles }}</div>
+        <div class="metric-label">Roles</div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-value">{{ total_personajes }}</div>
+        <div class="metric-label">Personajes</div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-value">{{ total_clases }}</div>
+        <div class="metric-label">Clases</div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-value">{{ total_razas }}</div>
+        <div class="metric-label">Razas</div>
+    </article>
+</section>
+{% endblock %}

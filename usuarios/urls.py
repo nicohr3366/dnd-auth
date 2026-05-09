@@ -1,9 +1,15 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from . import views
+from .forms import PortalAuthenticationForm
 
 app_name = 'usuarios'
 
 urlpatterns = [
+    path('registro/', views.registro, name='registro_publico'),
+    path('login/', auth_views.LoginView.as_view(template_name='usuarios/auth/login.html', authentication_form=PortalAuthenticationForm, redirect_authenticated_user=True), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='usuarios:login'), name='logout'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     # Usuarios
     path('', views.usuarios_lista, name='lista'),
     path('crear/', views.usuario_crear, name='crear'),

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Rol
 
@@ -98,3 +99,21 @@ class RolForm(forms.ModelForm):
                 'placeholder': 'Describe los permisos y responsabilidades de este rol...',
             }),
         }
+
+
+class PortalAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(
+        label='Usuario',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu usuario',
+            'autofocus': True,
+        }),
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu contraseña',
+        }),
+    )

@@ -1,0 +1,59 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-card">
+        <div class="auth-visual">
+            <div>
+                <div class="dashboard-kicker">Portal D&amp;D</div>
+                <h2>Ingresa al sistema</h2>
+                <p>
+                    Accede con tu usuario para entrar al dashboard y trabajar con los módulos de aventureros,
+                    personajes, clases y roles.
+                </p>
+            </div>
+            <p class="dashboard-note" style="color: #f0d9a8;">
+                Tu sesión te llevará directamente al dashboard una vez que te autentiques.
+            </p>
+        </div>
+
+        <div class="auth-form-panel">
+            <h1 class="dnd-title">Iniciar sesión</h1>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Usuario</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}<div class="invalid-feedback d-block">{{ form.username.errors.0 }}</div>{% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_password" class="form-label">Contraseña</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}<div class="invalid-feedback d-block">{{ form.password.errors.0 }}</div>{% endif %}
+                </div>
+
+                {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                {% endif %}
+
+                <div class="auth-actions">
+                    <button type="submit" class="btn btn-primary">Ingresar</button>
+                    <a href="{% url 'usuarios:registro_publico' %}" class="btn btn-neutral">Crear cuenta</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

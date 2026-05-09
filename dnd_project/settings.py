@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-^b7d=ml3+pr+6@p-6r**750$8*y$q+1s8=%n3_)wxe53-ss#tq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
 
 
 # Application definition
@@ -67,6 +67,10 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGIN_URL = 'usuarios:login'
+LOGIN_REDIRECT_URL = 'usuarios:dashboard'
+LOGOUT_REDIRECT_URL = 'usuarios:login'
 
 WSGI_APPLICATION = 'dnd_project.wsgi.application'
 
