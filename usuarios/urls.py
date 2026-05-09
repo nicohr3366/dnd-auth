@@ -16,7 +16,8 @@ urlpatterns = [
     path('registro/', views.registro, name='registro_publico'),
     # Usuarios
     path('', views.usuarios_lista, name='lista'),
-    path('dashboard/', views.usuarios_dashboard, name='dashboard'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('usuarios-dashboard/', views.usuarios_dashboard, name='usuarios_dashboard'),
     path('<int:pk>/', views.usuario_detalle, name='detalle'),
     path('crear/', views.usuario_crear, name='crear'),
     path('<int:pk>/editar/', views.usuario_editar, name='editar'),

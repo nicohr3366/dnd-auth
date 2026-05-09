@@ -55,8 +55,11 @@
                 </div>
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary">Registrarse</button>
-                    <a href="{% url 'usuarios:login' %}" class="btn btn-neutral text-center">Ya tengo cuenta</a>
                 </div>
+                <p class="text-center mt-3" style="color:#aaa;">
+                    ¿Ya tienes cuenta?
+                    <a href="{% url 'usuarios:login' %}" style="color:#d4af37;">Inicia sesión aquí</a>
+                </p>
             </form>
         </div>
     </div>

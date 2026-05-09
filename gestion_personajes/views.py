@@ -145,7 +145,10 @@ def lista_razas(request):
     razas = Raza.objects.all()
     return render(request, 'razas/lista.html', {'razas': razas})
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 @login_required
 def crear_raza(request):
     if request.method == 'POST':
@@ -158,7 +161,10 @@ def crear_raza(request):
         form = RazaForm()
     return render(request, 'razas/crear.html', {'form': form})
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 @login_required
 def editar_raza(request, id):
     raza = get_object_or_404(Raza, id_raza=id)
@@ -172,7 +178,10 @@ def editar_raza(request, id):
         form = RazaForm(instance=raza)
     return render(request, 'razas/editar.html', {'form': form, 'raza': raza})
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 @login_required
 def eliminar_raza(request, id):
     raza = get_object_or_404(Raza, id_raza=id)

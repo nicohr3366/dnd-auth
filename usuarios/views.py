@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import DatabaseError
 from django.shortcuts import get_object_or_404, redirect, render
 
-from gestion_personajes.models import Personaje
+from gestion_personajes.models import Clase, Personaje, Raza
 
 from .forms import RolForm, UsuarioCrearForm, UsuarioEditarForm
 from .models import PerfilUsuario, Rol
@@ -28,6 +29,34 @@ def registro(request):
         form = UsuarioCrearForm()
     form.fields['rol'].queryset = Rol.objects.exclude(nombre='Administrador')
     return render(request, 'usuarios/auth/registro.html', {'form': form})
+
+
+@login_required
+def dashboard(request):
+    def safe_count(model):
+        try:
+            return model.objects.count()
+        except DatabaseError:
+            return 0
+
+    rol_actual = 'Sin rol'
+    try:
+        perfil = request.user.perfil
+    except (DatabaseError, AttributeError):
+        perfil = None
+    if perfil and perfil.rol:
+        rol_actual = perfil.rol.nombre
+    elif request.user.is_superuser:
+        rol_actual = 'Administrador'
+    contexto = {
+        'total_usuarios': safe_count(User),
+        'total_roles': safe_count(Rol),
+        'total_clases': safe_count(Clase),
+        'total_razas': safe_count(Raza),
+        'total_personajes': safe_count(Personaje),
+        'rol_actual': rol_actual,
+    }
+    return render(request, 'usuarios/dashboard.html', contexto)
 
 
 # USUARIOS
