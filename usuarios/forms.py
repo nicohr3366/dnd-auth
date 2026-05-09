@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Rol
 
@@ -77,6 +78,24 @@ class UsuarioEditarForm(forms.Form):
         if qs.exists():
             raise forms.ValidationError('Este nombre de usuario ya está en uso.')
         return username
+
+
+class PortalAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(
+        label='Usuario',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu usuario',
+            'autofocus': True,
+        }),
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu contraseña',
+        }),
+    )
 
 
 class RolForm(forms.ModelForm):

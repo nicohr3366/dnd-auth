@@ -1,17 +1,18 @@
-﻿from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
+﻿from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Clase, Personaje, Raza
 from .forms import ClaseForm, PersonajeForm, RazaForm
-from django.db.models import Count
-from django.shortcuts import HttpResponse
 
 
+@login_required
 def clase_list(request):
     clases = Clase.objects.all()
     return render(request, 'gestion_personajes/clase_list.html', {'clases': clases})
 
 
+@login_required
 def clase_create(request):
     if request.method == 'POST':
         form = ClaseForm(request.POST)
@@ -24,6 +25,7 @@ def clase_create(request):
     return render(request, 'gestion_personajes/clase_form.html', {'form': form, 'title': 'Crear Clase'})
 
 
+@login_required
 def clase_update(request, pk):
     clase = get_object_or_404(Clase, pk=pk)
     if request.method == 'POST':
@@ -37,6 +39,7 @@ def clase_update(request, pk):
     return render(request, 'gestion_personajes/clase_form.html', {'form': form, 'title': 'Editar Clase'})
 
 
+@login_required
 def clase_delete(request, pk):
     clase = get_object_or_404(Clase, pk=pk)
     if request.method == 'POST':
@@ -50,11 +53,13 @@ def clase_delete(request, pk):
 # VISTAS PARA PERSONAJES
 # ========================
 
+@login_required
 def personaje_list(request):
     personajes = Personaje.objects.all()
     return render(request, 'crud_personajes/personaje_list.html', {'personajes': personajes})
 
 
+@login_required
 def personaje_create(request):
     if request.method == 'POST':
         form = PersonajeForm(request.POST)
@@ -67,6 +72,7 @@ def personaje_create(request):
     return render(request, 'crud_personajes/personaje_form.html', {'form': form, 'title': 'Crear Personaje'})
 
 
+@login_required
 def personaje_update(request, pk):
     personaje = get_object_or_404(Personaje, pk=pk)
     if request.method == 'POST':
@@ -80,6 +86,7 @@ def personaje_update(request, pk):
     return render(request, 'crud_personajes/personaje_form.html', {'form': form, 'title': 'Editar Personaje'})
 
 
+@login_required
 def personaje_delete(request, pk):
     personaje = get_object_or_404(Personaje, pk=pk)
     if request.method == 'POST':
@@ -89,11 +96,13 @@ def personaje_delete(request, pk):
     return render(request, 'crud_personajes/personaje_confirm_delete.html', {'personaje': personaje})
 
 
+@login_required
 def personaje_detail(request, pk):
     personaje = get_object_or_404(Personaje, pk=pk)
     return render(request, 'crud_personajes/personaje_detail.html', {'personaje': personaje})
 
 
+@login_required
 def dashboard(request):
     user = request.user
 
@@ -131,11 +140,13 @@ def dashboard(request):
 
 # ====== RAZAS ======
 
+@login_required
 def lista_razas(request):
     razas = Raza.objects.all()
     return render(request, 'razas/lista.html', {'razas': razas})
 
 
+@login_required
 def crear_raza(request):
     if request.method == 'POST':
         form = RazaForm(request.POST)
@@ -148,6 +159,7 @@ def crear_raza(request):
     return render(request, 'razas/crear.html', {'form': form})
 
 
+@login_required
 def editar_raza(request, id):
     raza = get_object_or_404(Raza, id_raza=id)
     if request.method == 'POST':
@@ -161,6 +173,7 @@ def editar_raza(request, id):
     return render(request, 'razas/editar.html', {'form': form, 'raza': raza})
 
 
+@login_required
 def eliminar_raza(request, id):
     raza = get_object_or_404(Raza, id_raza=id)
     if request.method == 'POST':
