@@ -1,0 +1,90 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="dnd-card mt-4">
+    <div class="action-bar">
+        <h1 class="dnd-title mb-0">Mi Perfil</h1>
+        <a href="{% url 'usuarios:dashboard' %}" class="btn-dnd-primary">Volver al dashboard</a>
+    </div>
+
+    <!-- Información del Usuario -->
+    <div class="empty-state" style="text-align:left; background-color: #1a1a1a; border: 2px solid #8b7355; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <p style="margin-bottom: 15px;">
+                    <strong style="color: #d4af37;">Usuario:</strong> 
+                    <span style="color: #c0c0c0;">{{ usuario.username }}</span>
+                </p>
+                <p style="margin-bottom: 15px;">
+                    <strong style="color: #d4af37;">Correo:</strong> 
+                    <span style="color: #c0c0c0;">{{ usuario.email|default:'—' }}</span>
+                </p>
+            </div>
+            <div>
+                <p style="margin-bottom: 15px;">
+                    <strong style="color: #d4af37;">Rol:</strong> 
+                    <span style="color: #c0c0c0;">{{ rol_nombre }}</span>
+                </p>
+                <p style="margin-bottom: 15px;">
+                    <strong style="color: #d4af37;">Estado:</strong> 
+                    <span style="color: #90EE90;">{% if usuario.is_active %}Activo{% else %}Inactivo{% endif %}</span>
+                </p>
+            </div>
+        </div>
+        <div style="margin-top: 15px;">
+            <a href="{% url 'usuarios:editar' usuario.id %}" class="btn-dnd-primary" style="display: inline-block;">Editar Perfil</a>
+        </div>
+    </div>
+
+    <!-- Mis Personajes -->
+    <h2 class="dnd-title mt-4" style="color: #d4af37; border-bottom: 2px solid #8b7355; padding-bottom: 10px;">Mis Personajes</h2>
+    
+    {% if personajes %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+        {% for personaje in personajes %}
+        <div class="dnd-card" style="background-color: #0f0f0f; border: 2px solid #8b7355;">
+            <div style="padding: 15px;">
+                <h3 style="color: #d4af37; margin-bottom: 10px;">{{ personaje.nombre }}</h3>
+                <div style="color: #c0c0c0; font-size: 14px; line-height: 1.8;">
+                    <p><strong style="color: #d4af37;">Nivel:</strong> {{ personaje.nivel }}</p>
+                    <p><strong style="color: #d4af37;">Raza:</strong> {{ personaje.raza.nombre }}</p>
+                    <p><strong style="color: #d4af37;">Clase:</strong> {{ personaje.clase.nombre }}</p>
+                    <p><strong style="color: #d4af37;">Vida:</strong> {{ personaje.vida_actual }}/{{ personaje.vida_maxima }}</p>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <a href="{% url 'gestion_personajes:personaje_detail' personaje.id_personaje %}" class="btn-dnd-primary" style="flex: 1; text-align: center;">Ver Detalles</a>
+                    <a href="{% url 'gestion_personajes:personaje_update' personaje.id_personaje %}" class="btn-dnd-secondary" style="flex: 1; text-align: center;">Editar</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No tienes personajes registrados aún.</p>
+        <a href="{% url 'gestion_personajes:personaje_create' %}" class="btn-dnd-primary">Crear tu primer personaje</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .btn-dnd-secondary {
+        display: inline-block;
+        background-color: #5a5a5a;
+        color: #c0c0c0;
+        padding: 8px 15px;
+        border: 1px solid #8b7355;
+        border-radius: 4px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-dnd-secondary:hover {
+        background-color: #8b7355;
+        color: #ffffff;
+    }
+</style>
+{% endblock %}

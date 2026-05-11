@@ -33,6 +33,10 @@
                         <a class="nav-link {% if 'personaje' in request.resolver_match.url_name %}active{% endif %}"
                            href="{% url 'gestion_personajes:personaje_list' %}">&#128100; Personajes</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'perfil' %}active{% endif %}"
+                           href="{% url 'usuarios:perfil' %}">👤 Mi Perfil</a>
+                    </li>
                     <li class="nav-item nav-auth-item">
                         <form method="post" action="{% url 'usuarios:logout' %}" class="nav-logout-form">
                             {% csrf_token %}

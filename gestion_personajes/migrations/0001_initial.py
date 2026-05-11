@@ -69,9 +69,9 @@ class Migration(migrations.Migration):
                 ('inteligencia', models.IntegerField(default=10)),
                 ('sabiduria', models.IntegerField(default=10)),
                 ('carisma', models.IntegerField(default=10)),
-                ('clase', models.ForeignKey(db_column='id_clase', on_delete=django.db.models.deletion.PROTECT, to='gestion_personajes.clase')),
-                ('user', models.ForeignKey(db_column='user_id', on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('raza', models.ForeignKey(db_column='id_raza', on_delete=django.db.models.deletion.PROTECT, to='gestion_personajes.raza')),
+                ('clase', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='gestion_personajes.clase')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('raza', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='gestion_personajes.raza')),
             ],
             options={
                 'db_table': 'personaje',

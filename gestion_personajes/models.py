@@ -80,9 +80,9 @@ class Personaje(models.Model):
     carisma = models.IntegerField(default=10)
 
     # Relaciones
-    user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
-    raza = models.ForeignKey(Raza, on_delete=models.PROTECT, db_column='id_raza')
-    clase = models.ForeignKey(Clase, on_delete=models.PROTECT, db_column='id_clase')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    raza = models.ForeignKey(Raza, on_delete=models.PROTECT)
+    clase = models.ForeignKey(Clase, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.nombre

@@ -98,6 +98,19 @@ def usuario_detalle(request, pk):
 
 
 @login_required
+def perfil_usuario(request):
+    usuario = request.user
+    perfil = getattr(usuario, 'perfil', None)
+    rol_nombre = perfil.rol.nombre if (perfil and perfil.rol) else 'Sin rol'
+    personajes = Personaje.objects.filter(user=usuario).select_related('raza', 'clase').order_by('nombre')
+    return render(request, 'usuarios/perfil.html', {
+        'usuario': usuario,
+        'rol_nombre': rol_nombre,
+        'personajes': personajes,
+    })
+
+
+@login_required
 def usuario_crear(request):
     if request.method == 'POST':
         form = UsuarioCrearForm(request.POST)
