@@ -1,112 +1,105 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from .models import PerfilUsuario, Rol
-from .forms import UsuarioCrearForm, UsuarioEditarForm, RolForm
+from .models import Rol, PerfilUsuario
+from .forms import PerfilForm, RolForm
+from .decorators import solo_admin
 
+# ─── LISTAR USUARIOS (lo ven todos) ─────────────────────
+@login_required
+def usuario_listar(request):
+    usuarios = User.objects.all().select_related('perfil')   # ← CORREGIDO
+    return render(request, 'usuarios/listar.html', {'usuarios': usuarios})
 
-#USUARIOS
-
-def usuarios_lista(request):
-    usuarios = User.objects.select_related('perfil').all().order_by('username')
-    return render(request, 'usuarios/usuarios/lista.html', {'usuarios': usuarios})
-
-
+# ─── CREAR USUARIO (solo admin) ─────────────────────────
+@login_required
+@solo_admin
 def usuario_crear(request):
     if request.method == 'POST':
-        form = UsuarioCrearForm(request.POST)
-        if form.is_valid():
-            user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password'],
-            )
-            PerfilUsuario.objects.create(
-                usuario=user,
-                rol=form.cleaned_data['rol'],
-            )
-            messages.success(request, f'Aventurero "{user.username}" registrado exitosamente.')
-            return redirect('usuarios:lista')
-    else:
-        form = UsuarioCrearForm()
-    return render(request, 'usuarios/usuarios/crear.html', {'form': form})
-
-
-def usuario_editar(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    perfil, _ = PerfilUsuario.objects.get_or_create(usuario=user)
-
-    if request.method == 'POST':
-        form = UsuarioEditarForm(request.POST, usuario_id=pk)
-        if form.is_valid():
-            user.username = form.cleaned_data['username']
-            user.email = form.cleaned_data['email']
-            if form.cleaned_data['password']:
-                user.set_password(form.cleaned_data['password'])
-            user.save()
-            perfil.rol = form.cleaned_data['rol']
-            perfil.save()
-            messages.success(request, f'Aventurero "{user.username}" actualizado correctamente.')
-            return redirect('usuarios:lista')
-    else:
-        form = UsuarioEditarForm(
-            initial={
-                'username': user.username,
-                'email': user.email,
-                'rol': perfil.rol,
-            },
-            usuario_id=pk,
-        )
-    return render(request, 'usuarios/usuarios/editar.html', {'form': form, 'usuario': user})
-
-
-def usuario_eliminar(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        nombre = user.username
-        user.delete()
-        messages.success(request, f'Aventurero "{nombre}" eliminado.')
-        return redirect('usuarios:lista')
-    return render(request, 'usuarios/usuarios/eliminar.html', {'usuario': user})
-
-
-# ROLES
-
-def roles_lista(request):
-    roles = Rol.objects.all().order_by('nombre')
-    return render(request, 'usuarios/roles/lista.html', {'roles': roles})
-
-
-def rol_crear(request):
-    if request.method == 'POST':
-        form = RolForm(request.POST)
-        if form.is_valid():
-            rol = form.save()
-            messages.success(request, f'Rol "{rol.nombre}" creado exitosamente.')
-            return redirect('usuarios:roles_lista')
-    else:
-        form = RolForm()
-    return render(request, 'usuarios/roles/crear.html', {'form': form})
-
-
-def rol_editar(request, pk):
-    rol = get_object_or_404(Rol, pk=pk)
-    if request.method == 'POST':
-        form = RolForm(request.POST, instance=rol)
+        form = PerfilForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, f'Rol "{rol.nombre}" actualizado correctamente.')
-            return redirect('usuarios:roles_lista')
+            messages.success(request, 'Usuario creado.')
+            return redirect('usuarios:usuario_listar')
     else:
-        form = RolForm(instance=rol)
-    return render(request, 'usuarios/roles/editar.html', {'form': form, 'rol': rol})
+        form = PerfilForm()
+    return render(request, 'usuarios/form.html', {'form': form, 'titulo': 'Crear Usuario'})
 
+# ─── EDITAR USUARIO (solo admin, y solo él puede cambiar el rol) ───
+@login_required
+@solo_admin
+def usuario_editar(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+    perfil = get_object_or_404(PerfilUsuario, user=usuario)
 
+    if request.method == 'POST':
+        form = PerfilForm(request.POST, instance=perfil)
+        if form.is_valid():
+            # Solo superusuario puede cambiar el rol
+            if not request.user.is_superuser:
+                messages.error(request, 'No tienes permiso para cambiar roles.')
+                return redirect('usuarios:usuario_listar')
+            form.save()
+            messages.success(request, 'Usuario actualizado.')
+            return redirect('usuarios:usuario_listar')
+    else:
+        form = PerfilForm(instance=perfil)
+
+    if not request.user.is_superuser:
+        form.fields['rol'].disabled = True
+
+    return render(request, 'usuarios/form.html', {
+        'form': form,
+        'titulo': 'Editar Usuario',
+        'es_admin': request.user.is_superuser
+    })
+
+# ─── ELIMINAR USUARIO (solo admin) ──────────────────────
+@login_required
+@solo_admin
+def usuario_eliminar(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        usuario.delete()
+        messages.success(request, 'Usuario eliminado.')
+        return redirect('usuarios:usuario_listar')
+    return render(request, 'usuarios/confirmar_eliminar.html', {'usuario': usuario})
+
+# ─── ROLES (todo solo admin) ────────────────────────────
+@login_required
+@solo_admin
+def rol_listar(request):
+    roles = Rol.objects.all()
+    return render(request, 'usuarios/roles_listar.html', {'roles': roles})
+
+@login_required
+@solo_admin
+def rol_crear(request):
+    form = RolForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Rol creado.')
+        return redirect('usuarios:rol_listar')
+    return render(request, 'usuarios/roles_form.html', {'form': form, 'titulo': 'Crear Rol'})
+
+@login_required
+@solo_admin
+def rol_editar(request, pk):
+    rol = get_object_or_404(Rol, pk=pk)
+    form = RolForm(request.POST or None, instance=rol)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Rol actualizado.')
+        return redirect('usuarios:rol_listar')
+    return render(request, 'usuarios/roles_form.html', {'form': form, 'titulo': 'Editar Rol'})
+
+@login_required
+@solo_admin
 def rol_eliminar(request, pk):
     rol = get_object_or_404(Rol, pk=pk)
     if request.method == 'POST':
-        nombre = rol.nombre
         rol.delete()
-        messages.success(request, f'Rol "{nombre}" eliminado.')
-        return redirect('usuarios:roles_lista')
-    return render(request, 'usuarios/roles/eliminar.html', {'rol': rol})
+        messages.success(request, 'Rol eliminado.')
+        return redirect('usuarios:rol_listar')
+    return render(request, 'usuarios/roles_confirmar_eliminar.html', {'rol': rol})

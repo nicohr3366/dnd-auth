@@ -4,14 +4,11 @@ from . import views
 app_name = 'usuarios'
 
 urlpatterns = [
-    # Usuarios
-    path('', views.usuarios_lista, name='lista'),
-    path('crear/', views.usuario_crear, name='crear'),
-    path('registro/', views.usuario_crear, name='registro'),
-    path('<int:pk>/editar/', views.usuario_editar, name='editar'),
-    path('<int:pk>/eliminar/', views.usuario_eliminar, name='eliminar'),
-    # Roles
-    path('roles/', views.roles_lista, name='roles_lista'),
+    path('', views.usuario_listar, name='usuario_listar'),
+    path('crear/', views.usuario_crear, name='usuario_crear'),
+    path('<int:pk>/editar/', views.usuario_editar, name='usuario_editar'),
+    path('<int:pk>/eliminar/', views.usuario_eliminar, name='usuario_eliminar'),
+    path('roles/', views.rol_listar, name='rol_listar'),
     path('roles/crear/', views.rol_crear, name='rol_crear'),
     path('roles/<int:pk>/editar/', views.rol_editar, name='rol_editar'),
     path('roles/<int:pk>/eliminar/', views.rol_eliminar, name='rol_eliminar'),
