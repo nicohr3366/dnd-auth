@@ -126,6 +126,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'dnd_project' / 'static',
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 LOGIN_URL = 'usuarios:login'
 LOGIN_REDIRECT_URL = 'usuarios:dashboard'
 LOGOUT_REDIRECT_URL = 'usuarios:login'
