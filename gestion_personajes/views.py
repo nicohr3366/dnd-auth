@@ -64,7 +64,9 @@ def personaje_create(request):
     if request.method == 'POST':
         form = PersonajeForm(request.POST)
         if form.is_valid():
-            form.save()
+            personaje = form.save(commit=False)
+            personaje.user = request.user
+            personaje.save()
             messages.success(request, 'Personaje creado correctamente.')
             return redirect('gestion_personajes:personaje_list')
     else:
@@ -165,7 +167,7 @@ def editar_raza(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, f'¡Raza "{raza.nombre}" actualizada correctamente!')
-            return redirect('gestion_personajes:editar_razas')
+            return redirect('gestion_personajes:lista_razas')
     else:
         form = RazaForm(instance=raza)
     return render(request, 'razas/editar.html', {'form': form, 'raza': raza})
@@ -177,5 +179,5 @@ def eliminar_raza(request, id):
         nombre_raza = raza.nombre
         raza.delete()
         messages.success(request, f'¡Raza "{nombre_raza}" eliminada permanentemente!')
-        return redirect('gestion_personajes:eliminar_razas')
+        return redirect('gestion_personajes:lista_razas')
     return render(request, 'razas/eliminar.html', {'raza': raza})

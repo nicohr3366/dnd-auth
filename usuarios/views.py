@@ -8,8 +8,17 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from gestion_personajes.models import Clase, Personaje, Raza
 
-from .forms import RolForm, UsuarioCrearForm, UsuarioEditarForm
+from .forms import PerfilPropioForm, RolForm, UsuarioCrearForm, UsuarioEditarForm
 from .models import PerfilUsuario, Rol
+
+
+def _es_admin(user):
+    if user.is_superuser:
+        return True
+    try:
+        return bool(user.perfil.rol and user.perfil.rol.nombre == 'Administrador')
+    except Exception:
+        return False
 
 
 def admin_requerido(view_func):
@@ -78,10 +87,13 @@ def dashboard(request):
 
 # USUARIOS
 
-@admin_requerido
+@login_required
 def usuarios_lista(request):
     usuarios = User.objects.select_related('perfil').all().order_by('username')
-    return render(request, 'usuarios/usuarios/lista.html', {'usuarios': usuarios})
+    return render(request, 'usuarios/usuarios/lista.html', {
+        'usuarios': usuarios,
+        'es_admin': _es_admin(request.user),
+    })
 
 
 @admin_requerido
@@ -101,7 +113,7 @@ def usuarios_dashboard(request):
     return render(request, 'usuarios/usuarios/dashboard.html', {'resumen': resumen})
 
 
-@admin_requerido
+@login_required
 def usuario_detalle(request, pk):
     usuario = get_object_or_404(User, pk=pk)
     perfil = getattr(usuario, 'perfil', None)
@@ -112,6 +124,33 @@ def usuario_detalle(request, pk):
         'rol_nombre': rol_nombre,
         'personajes': personajes,
     })
+
+
+@login_required
+def editar_perfil_propio(request):
+    usuario = request.user
+    es_admin = _es_admin(usuario)
+    perfil, _ = PerfilUsuario.objects.get_or_create(usuario=usuario)
+
+    if request.method == 'POST':
+        form = PerfilPropioForm(request.POST, usuario_id=usuario.pk, mostrar_rol=not es_admin)
+        if form.is_valid():
+            usuario.username = form.cleaned_data['username']
+            usuario.email = form.cleaned_data['email']
+            if form.cleaned_data['password']:
+                usuario.set_password(form.cleaned_data['password'])
+            usuario.save()
+            if not es_admin and 'rol' in form.cleaned_data:
+                perfil.rol = form.cleaned_data['rol']
+                perfil.save()
+            messages.success(request, 'Perfil actualizado correctamente.')
+            return redirect('usuarios:perfil')
+    else:
+        initial = {'username': usuario.username, 'email': usuario.email}
+        if not es_admin:
+            initial['rol'] = perfil.rol
+        form = PerfilPropioForm(initial=initial, usuario_id=usuario.pk, mostrar_rol=not es_admin)
+    return render(request, 'usuarios/editar_perfil.html', {'form': form, 'es_admin': es_admin})
 
 
 @login_required
@@ -191,17 +230,24 @@ def usuario_eliminar(request, pk):
 
 # ROLES
 
-@admin_requerido
+@login_required
 def roles_lista(request):
     roles = Rol.objects.all().order_by('nombre')
-    return render(request, 'usuarios/roles/lista.html', {'roles': roles})
+    return render(request, 'usuarios/roles/lista.html', {
+        'roles': roles,
+        'es_admin': _es_admin(request.user),
+    })
 
 
-@admin_requerido
+@login_required
 def rol_crear(request):
     if request.method == 'POST':
         form = RolForm(request.POST)
         if form.is_valid():
+            nombre = form.cleaned_data['nombre'].strip()
+            if nombre.lower() == 'administrador' and not _es_admin(request.user):
+                messages.error(request, 'No puedes crear el rol "Administrador".')
+                return render(request, 'usuarios/roles/crear.html', {'form': form})
             rol = form.save()
             messages.success(request, f'Rol "{rol.nombre}" creado exitosamente.')
             return redirect('usuarios:roles_lista')
@@ -210,12 +256,19 @@ def rol_crear(request):
     return render(request, 'usuarios/roles/crear.html', {'form': form})
 
 
-@admin_requerido
+@login_required
 def rol_editar(request, pk):
     rol = get_object_or_404(Rol, pk=pk)
+    if rol.nombre == 'Administrador' and not _es_admin(request.user):
+        messages.error(request, 'No tienes permisos para editar el rol "Administrador".')
+        return redirect('usuarios:roles_lista')
     if request.method == 'POST':
         form = RolForm(request.POST, instance=rol)
         if form.is_valid():
+            nombre_nuevo = form.cleaned_data['nombre'].strip()
+            if nombre_nuevo.lower() == 'administrador' and not _es_admin(request.user):
+                messages.error(request, 'No puedes asignar el nombre "Administrador" a un rol.')
+                return render(request, 'usuarios/roles/editar.html', {'form': form, 'rol': rol})
             form.save()
             messages.success(request, f'Rol "{rol.nombre}" actualizado correctamente.')
             return redirect('usuarios:roles_lista')
@@ -224,9 +277,12 @@ def rol_editar(request, pk):
     return render(request, 'usuarios/roles/editar.html', {'form': form, 'rol': rol})
 
 
-@admin_requerido
+@login_required
 def rol_eliminar(request, pk):
     rol = get_object_or_404(Rol, pk=pk)
+    if rol.nombre == 'Administrador' and not _es_admin(request.user):
+        messages.error(request, 'No tienes permisos para eliminar el rol "Administrador".')
+        return redirect('usuarios:roles_lista')
     if request.method == 'POST':
         nombre = rol.nombre
         rol.delete()

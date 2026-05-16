@@ -98,6 +98,61 @@ class PortalAuthenticationForm(AuthenticationForm):
     )
 
 
+class PerfilPropioForm(forms.Form):
+    username = forms.CharField(
+        max_length=150,
+        label='Nombre de usuario',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+    email = forms.EmailField(
+        label='Correo electrónico',
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+    )
+    rol = forms.ModelChoiceField(
+        queryset=Rol.objects.none(),
+        label='Rol',
+        required=False,
+        empty_label='Sin rol',
+        widget=forms.Select(attrs={'class': 'form-select'}),
+    )
+    password = forms.CharField(
+        label='Nueva contraseña (opcional)',
+        required=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Dejar vacío para no cambiar'}),
+    )
+    confirmar_password = forms.CharField(
+        label='Confirmar nueva contraseña',
+        required=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Repite la nueva contraseña'}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.usuario_id = kwargs.pop('usuario_id', None)
+        mostrar_rol = kwargs.pop('mostrar_rol', True)
+        super().__init__(*args, **kwargs)
+        if mostrar_rol:
+            self.fields['rol'].queryset = Rol.objects.exclude(nombre='Administrador')
+        else:
+            del self.fields['rol']
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        qs = User.objects.filter(username=username)
+        if self.usuario_id:
+            qs = qs.exclude(pk=self.usuario_id)
+        if qs.exists():
+            raise forms.ValidationError('Este nombre de usuario ya está en uso.')
+        return username
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirmar = cleaned_data.get('confirmar_password')
+        if password and confirmar and password != confirmar:
+            raise forms.ValidationError('Las contraseñas no coinciden.')
+        return cleaned_data
+
+
 class RolForm(forms.ModelForm):
     class Meta:
         model = Rol

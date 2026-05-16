@@ -29,9 +29,17 @@
                         <a class="nav-link {% if 'rol' in request.resolver_match.url_name %}active{% endif %}"
                            href="{% url 'usuarios:roles_lista' %}">&#128737;&#65039; Roles</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if 'personaje' in request.resolver_match.url_name %}active{% endif %}"
-                           href="{% url 'gestion_personajes:personaje_list' %}">&#128100; Personajes</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if 'personaje' in request.resolver_match.url_name or 'clase' in request.resolver_match.url_name or 'raza' in request.resolver_match.url_name %}active{% endif %}"
+                           href="#" data-bs-toggle="dropdown" aria-expanded="false">&#128100; Personajes</a>
+                        <ul class="dropdown-menu dnd-dropdown">
+                            <li><a class="dropdown-item {% if 'personaje' in request.resolver_match.url_name %}active{% endif %}"
+                                   href="{% url 'gestion_personajes:personaje_list' %}">&#128100; Personajes</a></li>
+                            <li><a class="dropdown-item {% if 'clase' in request.resolver_match.url_name %}active{% endif %}"
+                                   href="{% url 'gestion_personajes:clase_list' %}">&#9876;&#65039; Clases</a></li>
+                            <li><a class="dropdown-item {% if 'raza' in request.resolver_match.url_name %}active{% endif %}"
+                                   href="{% url 'gestion_personajes:lista_razas' %}">&#127758; Razas</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'perfil' %}active{% endif %}"

@@ -1,0 +1,97 @@
+{% extends 'usuarios/base.html' %}
+
+{% block title %}Editar Perfil{% endblock %}
+
+{% block content %}
+<div class="dnd-card mt-4" style="max-width: 600px; margin: 2rem auto;">
+    <div class="action-bar">
+        <h1 class="dnd-title mb-0">&#9998; Editar Perfil</h1>
+        <a href="{% url 'usuarios:perfil' %}" class="btn-dnd-secondary">Cancelar</a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mt-3" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label" style="color:#d4af37; font-family:'Cinzel',serif;">{{ form.username.label }}</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div style="color:#e74c3c; font-size:0.85rem; margin-top:4px;">{{ form.username.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" style="color:#d4af37; font-family:'Cinzel',serif;">{{ form.email.label }}</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div style="color:#e74c3c; font-size:0.85rem; margin-top:4px;">{{ form.email.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        {% if not es_admin %}
+        <div class="mb-3">
+            <label class="form-label" style="color:#d4af37; font-family:'Cinzel',serif;">{{ form.rol.label }}</label>
+            {{ form.rol }}
+            {% if form.rol.errors %}
+                <div style="color:#e74c3c; font-size:0.85rem; margin-top:4px;">{{ form.rol.errors.0 }}</div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <hr style="border-color:#2d2010; margin: 1.5rem 0;">
+        <p style="color:#9a8060; font-size:0.85rem; margin-bottom:1rem;">Deja las contraseñas en blanco si no deseas cambiarla.</p>
+
+        <div class="mb-3">
+            <label class="form-label" style="color:#d4af37; font-family:'Cinzel',serif;">{{ form.password.label }}</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <div style="color:#e74c3c; font-size:0.85rem; margin-top:4px;">{{ form.password.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" style="color:#d4af37; font-family:'Cinzel',serif;">{{ form.confirmar_password.label }}</label>
+            {{ form.confirmar_password }}
+            {% if form.confirmar_password.errors %}
+                <div style="color:#e74c3c; font-size:0.85rem; margin-top:4px;">{{ form.confirmar_password.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        {% if form.non_field_errors %}
+        <div style="color:#e74c3c; font-size:0.85rem; margin-bottom:1rem;">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+
+        <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+            <button type="submit" class="btn-dnd-primary">Guardar cambios</button>
+            <a href="{% url 'usuarios:perfil' %}" class="btn-dnd-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<style>
+.btn-dnd-secondary {
+    display: inline-block;
+    background-color: #2a2010;
+    color: #9a8060;
+    padding: 8px 18px;
+    border: 1px solid #5a4a30;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-dnd-secondary:hover {
+    background-color: #3a3020;
+    color: #d4af37;
+    border-color: #d4af37;
+}
+</style>
+{% endblock %}

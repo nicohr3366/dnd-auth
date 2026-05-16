@@ -1,89 +1,39 @@
 {% extends "razas/base.html" %}
-
-{% block title %}Confirmar Eliminación - Gestión RPG{% endblock %}
-{% block hero_subtitle %}Confirma la eliminación de la raza{% endblock %}
+{% block page_title %}Eliminar Raza{% endblock %}
 
 {% block content %}
-<div style="max-width: 600px; margin: 2rem auto;">
-    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-        <a href="{% url 'gestion_personajes:lista_razas' %}" class="btn btn-neutral btn-sm">📜 Ver Razas</a>
-        <a href="{% url 'gestion_personajes:crear_raza' %}" class="btn btn-primary btn-sm">➕ Crear Raza</a>
+<div class="dnd-card mt-4 form-page">
+    <h1 class="dnd-title">&#10005; Eliminar Raza</h1>
+
+    <div class="delete-box">
+        <div class="entity-name">{{ raza.nombre }}</div>
+        {% if raza.descripcion %}
+            <p style="color:#9a8060; font-size:0.9rem; margin:0.5rem 0 0;">{{ raza.descripcion }}</p>
+        {% endif %}
+
+        {% if raza.bono_fuerza != 0 or raza.bono_destreza != 0 or raza.bono_constitucion != 0 or raza.bono_inteligencia != 0 or raza.bono_sabiduria != 0 or raza.bono_carisma != 0 %}
+        <div style="margin-top:0.8rem;">
+            {% if raza.bono_fuerza != 0 %}<span class="stat-badge">Fuerza {{ raza.bono_fuerza }}</span>{% endif %}
+            {% if raza.bono_destreza != 0 %}<span class="stat-badge">Destreza {{ raza.bono_destreza }}</span>{% endif %}
+            {% if raza.bono_constitucion != 0 %}<span class="stat-badge">Constitución {{ raza.bono_constitucion }}</span>{% endif %}
+            {% if raza.bono_inteligencia != 0 %}<span class="stat-badge">Inteligencia {{ raza.bono_inteligencia }}</span>{% endif %}
+            {% if raza.bono_sabiduria != 0 %}<span class="stat-badge">Sabiduría {{ raza.bono_sabiduria }}</span>{% endif %}
+            {% if raza.bono_carisma != 0 %}<span class="stat-badge">Carisma {{ raza.bono_carisma }}</span>{% endif %}
+        </div>
+        {% endif %}
     </div>
 
-    <div class="confirmation-panel">
-        <div class="confirmation-icon">⚠️</div>
-        
-        <h1 class="confirmation-title">Eliminar Raza</h1>
-        
-        <p class="confirmation-text">
-            ¿Estás seguro de que deseas eliminar esta raza?
-        </p>
+    <div class="warning-box" style="margin:1.5rem 0;">
+        <strong style="color:#fca5a5;">&#9888; Acción Irreversible</strong>
+        <p style="margin:0.4rem 0 0; font-size:0.9rem;">Esta acción es permanente y no se puede deshacer. La raza será eliminada del sistema.</p>
+    </div>
 
-        <!-- Información de la Raza -->
-        <div class="confirmation-item">
-            <div class="confirmation-item-name">{{ raza.nombre }}</div>
-            {% if raza.descripcion %}
-                <p style="margin-top: 0.5rem; color: var(--ink-soft); font-size: 0.95rem;">{{ raza.descripcion }}</p>
-            {% endif %}
-            
-            <!-- Mostrar bonos -->
-            {% if raza.bono_fuerza != 0 or raza.bono_destreza != 0 or raza.bono_constitucion != 0 or raza.bono_inteligencia != 0 or raza.bono_sabiduria != 0 or raza.bono_carisma != 0 %}
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #d3c2a4;">
-                    <strong style="display: block; margin-bottom: 0.5rem; color: var(--ink);">Bonos de Atributos:</strong>
-                    <div>
-                        {% if raza.bono_fuerza != 0 %}
-                            <span class="stat-badge">Fuerza {{ raza.bono_fuerza|floatformat:0 }}</span>
-                        {% endif %}
-                        {% if raza.bono_destreza != 0 %}
-                            <span class="stat-badge">Destreza {{ raza.bono_destreza|floatformat:0 }}</span>
-                        {% endif %}
-                        {% if raza.bono_constitucion != 0 %}
-                            <span class="stat-badge">Constitución {{ raza.bono_constitucion|floatformat:0 }}</span>
-                        {% endif %}
-                        {% if raza.bono_inteligencia != 0 %}
-                            <span class="stat-badge">Inteligencia {{ raza.bono_inteligencia|floatformat:0 }}</span>
-                        {% endif %}
-                        {% if raza.bono_sabiduria != 0 %}
-                            <span class="stat-badge">Sabiduría {{ raza.bono_sabiduria|floatformat:0 }}</span>
-                        {% endif %}
-                        {% if raza.bono_carisma != 0 %}
-                            <span class="stat-badge">Carisma {{ raza.bono_carisma|floatformat:0 }}</span>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- Advertencia Importante -->
-        <div style="background: rgba(158, 43, 32, 0.1); border: 2px solid var(--red); border-radius: 8px; padding: 1rem; margin-bottom: 2rem; text-align: left;">
-            <p style="color: var(--red); font-weight: 600; margin: 0; font-size: 0.95rem;">
-                ⚠️ <strong>Acción Irreversible</strong>
-            </p>
-            <p style="color: var(--ink-soft); margin: 0.5rem 0 0 0; font-size: 0.9rem;">
-                Esta acción es permanente y no se puede deshacer. La raza será eliminada del sistema.
-            </p>
-        </div>
-
-        <!-- Botones de Acción -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <a href="{% url 'gestion_personajes:lista_razas' %}" class="btn btn-neutral">
-                ❌ Cancelar
-            </a>
-            
-            <form method="POST" style="margin: 0;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger" style="width: 100%; margin: 0;">
-                    Eliminar Definitivamente
-                </button>
-            </form>
-        </div>
-
-        <!-- Información de Seguridad -->
-        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line);">
-            <p style="color: var(--ink-soft); font-size: 0.85rem; margin: 0;">
-                Si cambias de opinión, puedes hacer clic en "Cancelar" para volver atrás.
-            </p>
-        </div>
+    <div class="form-actions">
+        <form method="POST" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" class="btn-dnd-danger">&#10005; Eliminar Definitivamente</button>
+        </form>
+        <a href="{% url 'gestion_personajes:lista_razas' %}" class="btn-dnd-secondary">&#8592; Cancelar</a>
     </div>
 </div>
 {% endblock %}

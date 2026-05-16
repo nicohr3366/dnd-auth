@@ -25,14 +25,18 @@
                 {% for rol in roles %}
                 <tr>
                     <td class="text-dim">{{ rol.pk }}</td>
-                    <td><strong style="color: var(--gold);">{{ rol.nombre }}</strong></td>
-                    <td class="text-dim">{{ rol.descripcion|truncatechars:80|default:"—" }}</td>
-                    <td class="text-dim" style="font-size: 0.8rem; white-space: nowrap;">
+                    <td><strong style="color:#d4af37;">{{ rol.nombre }}</strong></td>
+                    <td class="text-dim" style="max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ rol.descripcion|default:"—" }}</td>
+                    <td class="text-dim" style="font-size:0.8rem; white-space:nowrap;">
                         {{ rol.fecha_creacion|date:"d/m/Y" }}
                     </td>
                     <td>
-                        <a href="{% url 'usuarios:rol_editar' rol.pk %}" class="btn-dnd-edit">&#9998; Editar</a>
-                        <a href="{% url 'usuarios:rol_eliminar' rol.pk %}" class="btn-dnd-delete">&#10005; Eliminar</a>
+                        {% if es_admin or rol.nombre != 'Administrador' %}
+                            <a href="{% url 'usuarios:rol_editar' rol.pk %}" class="btn-dnd-edit">&#9998; Editar</a>
+                            <a href="{% url 'usuarios:rol_eliminar' rol.pk %}" class="btn-dnd-delete">&#10005; Eliminar</a>
+                        {% else %}
+                            <span style="color:#9a8060; font-size:0.8rem; font-family:'Cinzel',serif;">Protegido</span>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -42,7 +46,7 @@
     {% else %}
     <div class="empty-state">
         <div class="empty-icon">&#128737;&#65039;</div>
-        <p>No hay roles personalizados creados aún.</p>
+        <p>No hay roles creados aún.</p>
         <a href="{% url 'usuarios:rol_crear' %}" class="btn-dnd-primary">Crear el primer rol</a>
     </div>
     {% endif %}

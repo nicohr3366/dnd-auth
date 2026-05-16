@@ -6,10 +6,12 @@
 <div class="dnd-card mt-4">
     <div class="action-bar">
         <h1 class="dnd-title mb-0">&#129497; Gestión de Aventureros</h1>
+        {% if es_admin %}
         <div>
             <a href="{% url 'usuarios:dashboard' %}" class="btn-dnd-primary">Ver usuarios registrados</a>
             <a href="{% url 'usuarios:crear' %}" class="btn-dnd-primary">&#10022; Registrar Aventurero</a>
         </div>
+        {% endif %}
     </div>
 
     {% if usuarios %}
@@ -22,7 +24,7 @@
                     <th>Correo</th>
                     <th>Rol</th>
                     <th>Estado</th>
-                    <th>Acciones</th>
+                    {% if es_admin %}<th>Acciones</th>{% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -55,10 +57,12 @@
                             <span class="status-inactive">&#9679; Inactivo</span>
                         {% endif %}
                     </td>
+                    {% if es_admin %}
                     <td>
                         <a href="{% url 'usuarios:editar' usuario.pk %}" class="btn-dnd-edit">&#9998; Editar</a>
                         <a href="{% url 'usuarios:eliminar' usuario.pk %}" class="btn-dnd-delete">&#10005; Eliminar</a>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -68,7 +72,9 @@
     <div class="empty-state">
         <div class="empty-icon">&#9876;&#65039;</div>
         <p>No hay aventureros registrados aún.</p>
+        {% if es_admin %}
         <a href="{% url 'usuarios:crear' %}" class="btn-dnd-primary">Registrar el primer aventurero</a>
+        {% endif %}
     </div>
     {% endif %}
 </div>

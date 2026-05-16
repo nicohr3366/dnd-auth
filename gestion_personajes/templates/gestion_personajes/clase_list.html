@@ -1,14 +1,15 @@
 {% extends 'gestion_personajes/base.html' %}
+{% block page_title %}Clases{% endblock %}
 
 {% block content %}
-<section class="panel">
-    <div class="title-row">
-        <h2>Clases disponibles</h2>
-        <a class="btn btn-primary" href="{% url 'gestion_personajes:clase_create' %}">Crear Clase</a>
+<div class="dnd-card mt-4">
+    <div class="action-bar">
+        <h1 class="dnd-title mb-0">&#9876;&#65039; Clases disponibles</h1>
+        <a class="btn-dnd-primary" href="{% url 'gestion_personajes:clase_create' %}">&#10022; Crear Clase</a>
     </div>
 
-    <div class="table-wrap">
-        <table>
+    <div class="table-responsive">
+        <table class="dnd-table">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -19,21 +20,22 @@
             <tbody>
                 {% for clase in clases %}
                 <tr>
-                    <td>{{ clase.nombre }}</td>
-                    <td>d{{ clase.dado_vida }}</td>
+                    <td><strong style="color:#d4af37;">{{ clase.nombre }}</strong></td>
+                    <td class="text-dim">d{{ clase.dado_vida }}</td>
                     <td>
-                        <a class="btn btn-success" href="{% url 'gestion_personajes:clase_update' clase.pk %}">Editar</a>
-                        <a class="btn btn-danger" href="{% url 'gestion_personajes:clase_delete' clase.pk %}">Eliminar</a>
+                        <a class="btn-dnd-edit" href="{% url 'gestion_personajes:clase_update' clase.pk %}">&#9998; Editar</a>
+                        <a class="btn-dnd-delete" href="{% url 'gestion_personajes:clase_delete' clase.pk %}">&#10005; Eliminar</a>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="3" class="empty-cell">Aun no hay clases registradas. Crea la primera ficha de clase.</td>
+                    <td colspan="3" style="text-align:center; color:#9a8060; padding:2rem; font-style:italic;">
+                        Aun no hay clases registradas. Crea la primera ficha de clase.
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-</section>
-
+</div>
 {% endblock %}

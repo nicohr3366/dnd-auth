@@ -1,76 +1,72 @@
 {% extends 'gestion_personajes/base.html' %}
+{% block page_title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="panel">
-    <div class="title-row">
-        <h2>{{ title }}</h2>
-    </div>
+<div class="dnd-card mt-4 form-page">
+    <h1 class="dnd-title">&#128100; {{ title }}</h1>
 
-    <form method="post">
+    <form method="post" novalidate>
         {% csrf_token %}
-        <div class="form-group">
-            {{ form.nombre.label_tag }}
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
             {{ form.nombre }}
         </div>
-        <div class="form-group">
-            {{ form.nivel.label_tag }}
+        <div class="mb-3">
+            <label class="form-label">Nivel</label>
             {{ form.nivel }}
         </div>
-        <div class="form-group">
-            {{ form.experiencia.label_tag }}
+        <div class="mb-3">
+            <label class="form-label">Experiencia</label>
             {{ form.experiencia }}
         </div>
-        <div class="form-group">
-            {{ form.user.label_tag }}
-            {{ form.user }}
-        </div>
-
-        <div class="form-group">
-            {{ form.raza.label_tag }}
+        <div class="mb-3">
+            <label class="form-label">Raza</label>
             {{ form.raza }}
         </div>
-        <div class="form-group">
-            {{ form.clase.label_tag }}
+        <div class="mb-3">
+            <label class="form-label">Clase</label>
             {{ form.clase }}
         </div>
-
-        <div class="form-group">
-            {{ form.vida_actual.label_tag }}
+        <hr class="dnd-sep">
+        <div class="mb-3">
+            <label class="form-label">Vida Actual</label>
             {{ form.vida_actual }}
         </div>
-        <div class="form-group">
-            {{ form.vida_maxima.label_tag }}
+        <div class="mb-3">
+            <label class="form-label">Vida Máxima</label>
             {{ form.vida_maxima }}
         </div>
-        
-        <div class="form-group">
-            {{ form.fuerza.label_tag }}
-            {{ form.fuerza }}
+        <hr class="dnd-sep">
+        <div class="stats-grid">
+            <div class="stat-input-group">
+                <label class="form-label">Fuerza</label>
+                {{ form.fuerza }}
+            </div>
+            <div class="stat-input-group">
+                <label class="form-label">Destreza</label>
+                {{ form.destreza }}
+            </div>
+            <div class="stat-input-group">
+                <label class="form-label">Constitución</label>
+                {{ form.constitucion }}
+            </div>
+            <div class="stat-input-group">
+                <label class="form-label">Inteligencia</label>
+                {{ form.inteligencia }}
+            </div>
+            <div class="stat-input-group">
+                <label class="form-label">Sabiduría</label>
+                {{ form.sabiduria }}
+            </div>
+            <div class="stat-input-group">
+                <label class="form-label">Carisma</label>
+                {{ form.carisma }}
+            </div>
         </div>
-        <div class="form-group">
-            {{ form.destreza.label_tag }}
-            {{ form.destreza }}
-        </div>
-        <div class="form-group">
-            {{ form.constitucion.label_tag }}
-            {{ form.constitucion }}
-        </div>
-        <div class="form-group">
-            {{ form.inteligencia.label_tag }}
-            {{ form.inteligencia }}
-        </div>
-        <div class="form-group">
-            {{ form.sabiduria.label_tag }}
-            {{ form.sabiduria }}
-        </div>
-        <div class="form-group">
-            {{ form.carisma.label_tag }}
-            {{ form.carisma }}
-        </div>
-
+        <hr class="dnd-sep">
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <a href="{% url 'gestion_personajes:personaje_list' %}" class="btn btn-neutral">Cancelar</a>
+            <button type="submit" class="btn-dnd-primary">Guardar</button>
+            <a href="{% url 'gestion_personajes:personaje_list' %}" class="btn-dnd-secondary">&#8592; Cancelar</a>
         </div>
     </form>
 </div>

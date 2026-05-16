@@ -54,6 +54,18 @@
  */
 
 /* ================================================================
+   0. CSS VARIABLES — portal D&D dark theme
+   ================================================================ */
+:root {
+    --gold:     #d4af37;
+    --ink:      #e8d5b7;
+    --ink-soft: #9a8060;
+    --red:      #9e2b20;
+    --green:    #3f6a3f;
+    --line:     #2d2010;
+}
+
+/* ================================================================
    1. RESET BASE
    ================================================================ */
 *, *::before, *::after {
@@ -636,6 +648,36 @@ body:has(.dnd-container) ::-webkit-scrollbar-thumb { background: #8b7536; border
 }
 
 /* ================================================================
+   5b-2. USUARIOS — Dropdown nav
+   ================================================================ */
+.dnd-dropdown {
+    background: #0d0800;
+    border: 1px solid #8b7536;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    padding: 0.25rem 0;
+    min-width: 160px;
+}
+.dnd-dropdown .dropdown-item {
+    color: #e8d5b7;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.55rem 1rem;
+    transition: background 0.15s, color 0.15s;
+}
+.dnd-dropdown .dropdown-item:hover,
+.dnd-dropdown .dropdown-item:focus {
+    background: rgba(212,175,55,0.1);
+    color: #d4af37;
+}
+.dnd-dropdown .dropdown-item.active {
+    background: rgba(212,175,55,0.12);
+    color: #d4af37;
+}
+
+/* ================================================================
    5c. USUARIOS — Contenedor y layout
    ================================================================ */
 .dnd-container {
@@ -750,6 +792,10 @@ body:has(.dnd-container) ::-webkit-scrollbar-thumb { background: #8b7536; border
 .dashboard-text { color: #e8d5b7; opacity: 0.8; max-width: 60ch; }
 .dashboard-note { font-size: 0.92rem; color: #9a8060; }
 .text-dim       { color: #9a8060; }
+
+.dashboard-side h2 {
+    color: #d4af37;
+}
 
 .dashboard-actions {
     display: flex;
@@ -1122,4 +1168,103 @@ body:has(.dnd-container) ::-webkit-scrollbar-thumb { background: #8b7536; border
 .dnd-table tbody td {
     color: #e8d5b7 !important;
     border-bottom: 1px solid rgba(45,32,16,0.6) !important;
+}
+
+/* ================================================================
+   6. DARK OVERRIDES — gestion_personajes dentro de .dnd-container
+   ================================================================ */
+
+/* Raza cards en tema oscuro */
+.dnd-container .raza-card {
+    background: linear-gradient(180deg, #151c2e, #111827);
+    border-color: #2d2010;
+}
+.dnd-container .raza-card:hover {
+    border-color: #d4af37;
+    box-shadow: 0 12px 28px rgba(212,175,55,0.15);
+}
+.dnd-container .raza-card-title {
+    color: #d4af37;
+    border-bottom-color: #8b7536;
+}
+.dnd-container .raza-card-desc {
+    color: #9a8060;
+}
+.dnd-container .stat-badge {
+    color: #d4af37;
+    border-color: #8b7536;
+    background: rgba(139,117,54,0.15);
+}
+
+/* Confirmation panel en tema oscuro */
+.dnd-container .confirmation-item {
+    background: #150e04;
+    border-left-color: #9e2b20;
+}
+.dnd-container .confirmation-item-name {
+    color: #d4af37;
+}
+.dnd-container .confirmation-text,
+.dnd-container .confirmation-panel p {
+    color: #9a8060;
+}
+
+/* Warning box en tema oscuro */
+.dnd-container .warning-box {
+    background: rgba(158,43,32,0.12);
+    color: #fca5a5;
+    border-left-color: #9e2b20;
+}
+
+/* ================================================================
+   7. PERSONAJE DETAIL — Atributos grid
+   ================================================================ */
+.personaje-info {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+.personaje-info p {
+    color: #e8d5b7;
+    margin-bottom: 0.45rem;
+    border-bottom: 1px solid #1a1d2e;
+    padding-bottom: 0.45rem;
+}
+.personaje-info p strong {
+    color: #8b7536;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-right: 0.4rem;
+}
+
+.atributos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.9rem;
+    margin-top: 1.5rem;
+}
+.atributo {
+    background: #0d1117;
+    border: 1px solid #2d2010;
+    border-radius: 6px;
+    padding: 0.8rem 0.5rem;
+    text-align: center;
+}
+.atributo label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #8b7536;
+    margin-bottom: 0.35rem;
+    font-weight: normal;
+}
+.atributo p {
+    font-size: 1.6rem;
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+    margin: 0;
+    line-height: 1;
 }

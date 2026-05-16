@@ -1,17 +1,19 @@
 {% extends 'gestion_personajes/base.html' %}
+{% block page_title %}Eliminar Clase{% endblock %}
 
 {% block content %}
-<section class="panel">
-  <h2>Eliminar Clase</h2>
-  <div class="warning-box">
-    Esta accion eliminara de forma permanente la clase <strong>{{ clase.nombre }}</strong>.
-  </div>
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-actions">
-      <button class="btn btn-danger" type="submit">Si, eliminar</button>
-      <a class="btn btn-neutral" href="{% url 'gestion_personajes:clase_list' %}">Cancelar</a>
+<div class="dnd-card mt-4 form-page">
+    <h1 class="dnd-title">&#10005; Eliminar Clase</h1>
+    <div class="delete-box">
+        <div class="entity-name">{{ clase.nombre }}</div>
+        <p style="color:#9a8060; font-size:0.9rem; margin:0.25rem 0 0;">Esta acción eliminará la clase de forma permanente.</p>
     </div>
-  </form>
-</section>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button class="btn-dnd-danger" type="submit">&#10005; Sí, eliminar</button>
+            <a class="btn-dnd-secondary" href="{% url 'gestion_personajes:clase_list' %}">&#8592; Cancelar</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

@@ -2,10 +2,22 @@
 from .models import Clase, Personaje, Raza
 
 
+DADOS_VIDA = [(4, 'd4'), (6, 'd6'), (8, 'd8'), (10, 'd10'), (12, 'd12'), (20, 'd20')]
+
 class ClaseForm(forms.ModelForm):
+    dado_vida = forms.ChoiceField(
+        choices=DADOS_VIDA,
+        label='Dado de vida',
+        widget=forms.Select(attrs={'class': 'form-control'}),
+    )
+
     class Meta:
         model = Clase
         fields = ['nombre', 'descripcion', 'dado_vida']
+        widgets = {
+            'nombre':      forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
 
 
 class PersonajeForm(forms.ModelForm):
@@ -16,7 +28,7 @@ class PersonajeForm(forms.ModelForm):
             'vida_actual', 'vida_maxima',
             'fuerza', 'destreza', 'constitucion',
             'inteligencia', 'sabiduria', 'carisma',
-            'user', 'raza', 'clase'
+            'raza', 'clase'
         ]
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del personaje'}),
@@ -30,7 +42,6 @@ class PersonajeForm(forms.ModelForm):
             'inteligencia': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
             'sabiduria': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
             'carisma': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
-            'user': forms.Select(attrs={'class': 'form-control'}),
             'raza': forms.Select(attrs={'class': 'form-control'}),
             'clase': forms.Select(attrs={'class': 'form-control'}),
         }

@@ -1,17 +1,23 @@
 {% extends 'gestion_personajes/base.html' %}
+{% block page_title %}{{ title }}{% endblock %}
 
 {% block content %}
-<section class="panel">
-  <h2>{{ title }}</h2>
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      {{ form.as_p }}
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-success" type="submit">Guardar Clase</button>
-      <a class="btn btn-neutral" href="{% url 'gestion_personajes:clase_list' %}">Volver</a>
-    </div>
-  </form>
-</section>
+<div class="dnd-card mt-4 form-page">
+    <h1 class="dnd-title">&#9876;&#65039; {{ title }}</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors.0 }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <hr class="dnd-sep">
+        <div class="form-actions">
+            <button class="btn-dnd-primary" type="submit">Guardar Clase</button>
+            <a class="btn-dnd-secondary" href="{% url 'gestion_personajes:clase_list' %}">&#8592; Volver</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

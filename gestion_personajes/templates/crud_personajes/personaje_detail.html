@@ -1,12 +1,13 @@
 {% extends 'gestion_personajes/base.html' %}
+{% block page_title %}{{ personaje.nombre }}{% endblock %}
 
 {% block content %}
-<div class="panel">
-    <div class="title-row">
-        <h2>{{ personaje.nombre }}</h2>
+<div class="dnd-card mt-4">
+    <div class="action-bar">
+        <h1 class="dnd-title mb-0">&#128100; {{ personaje.nombre }}</h1>
         <div>
-            <a href="{% url 'gestion_personajes:personaje_update' personaje.id_personaje %}" class="btn btn-success">Editar</a>
-            <a href="{% url 'gestion_personajes:personaje_delete' personaje.id_personaje %}" class="btn btn-danger">Eliminar</a>
+            <a href="{% url 'gestion_personajes:personaje_update' personaje.id_personaje %}" class="btn-dnd-edit">&#9998; Editar</a>
+            <a href="{% url 'gestion_personajes:personaje_delete' personaje.id_personaje %}" class="btn-dnd-delete">&#10005; Eliminar</a>
         </div>
     </div>
 
@@ -29,5 +30,8 @@
         <div class="atributo"><label>Carisma</label><p>{{ personaje.carisma }}</p></div>
     </div>
 
+    <div class="form-actions" style="margin-top:2rem;">
+        <a href="{% url 'gestion_personajes:personaje_list' %}" class="btn-dnd-secondary">&#8592; Volver a la lista</a>
+    </div>
 </div>
 {% endblock %}
