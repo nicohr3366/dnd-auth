@@ -1,0 +1,1125 @@
+/*
+ * ================================================================
+ *  D&D PLATFORM — dnd_theme.css
+ *  Estilos globales unificados
+ *  Combina: gestion_personajes/estilos.css + usuarios/style.css
+ *
+ *  Uso en gestion_personajes/base.html:
+ *    <link rel="stylesheet" href="{% static 'css/dnd_theme.css' %}">
+ *
+ *  Uso en usuarios/base.html (mantén Bootstrap antes de este):
+ *    <link rel="stylesheet" href="{% static 'css/dnd_theme.css' %}">
+ *
+ *  Google Fonts (agregar en ambos base.html):
+ *    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+ * ================================================================
+ *
+ *  ÍNDICE
+ *  1.  Reset base
+ *  2.  Body — tema claro (gestion_personajes, sin .dnd-container)
+ *  3.  Body — tema oscuro (usuarios, con .dnd-container)
+ *  4.  MÓDULO gestion_personajes
+ *      4a. Layout y contenedor
+ *      4b. Hero header
+ *      4c. Panel y títulos
+ *      4d. Botones
+ *      4e. Tablas
+ *      4f. Formularios
+ *      4g. Razas cards
+ *      4h. Stats grid
+ *      4i. Alertas claro
+ *      4j. Estado vacío
+ *      4k. Confirmación
+ *      4l. Footer
+ *      4m. Responsive
+ *  5.  MÓDULO usuarios (compatible con Bootstrap 5)
+ *      5a. Scrollbar
+ *      5b. Navbar
+ *      5c. Contenedor y layout
+ *      5d. Cards
+ *      5e. Títulos
+ *      5f. Action bar
+ *      5g. Tablas dnd-table
+ *      5h. Botones dnd-*
+ *      5i. Formularios dark
+ *      5j. Alertas dark
+ *      5k. Badges de rol
+ *      5l. Estado vacío dark
+ *      5m. Delete box
+ *      5n. Dashboard
+ *      5o. Auth
+ *      5p. Footer usuarios
+ *      5q. Responsive usuarios
+ * ================================================================
+ */
+
+/* ================================================================
+   1. RESET BASE
+   ================================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* ================================================================
+   2. BODY — tema claro (gestion_personajes)
+      Aplica cuando NO hay .dnd-container en la página
+   ================================================================ */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+    color: #2e2419;
+    line-height: 1.6;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.42), transparent 45%),
+        radial-gradient(circle at 80% 0%,  rgba(255,210,138,0.22), transparent 38%),
+        linear-gradient(180deg, #f6edd9 0%, #ebdec3 100%);
+}
+
+/* ================================================================
+   3. BODY — tema oscuro (usuarios)
+      Aplica cuando hay .dnd-container en la página
+   ================================================================ */
+body:has(.dnd-container) {
+    background-color: #0a0a0f;
+    background-image:
+        radial-gradient(ellipse 80% 40% at 50% 0%,   rgba(60,20,80,0.22) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 30% at 50% 100%, rgba(80,20,20,0.14) 0%, transparent 70%);
+    color: #e8d5b7;
+    font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+body:has(.dnd-container) ::-webkit-scrollbar       { width: 6px; }
+body:has(.dnd-container) ::-webkit-scrollbar-track { background: #0a0a0f; }
+body:has(.dnd-container) ::-webkit-scrollbar-thumb { background: #8b7536; border-radius: 3px; }
+
+/* ================================================================
+   4a. GESTION_PERSONAJES — Layout y contenedor
+   ================================================================ */
+.container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+}
+
+main.container {
+    margin-top: 2rem;
+}
+
+/* ================================================================
+   4b. GESTION_PERSONAJES — Hero header
+   ================================================================ */
+.hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(130deg, #3f2a1b 0%, #6a472b 55%, #3a291d 100%);
+    color: #f7edd8;
+    border-bottom: 4px solid #c48a2d;
+    box-shadow: 0 14px 35px rgba(35,23,13,0.2);
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.02) 0,
+        rgba(255,255,255,0.02) 22px,
+        rgba(0,0,0,0.04) 22px,
+        rgba(0,0,0,0.04) 44px
+    );
+    pointer-events: none;
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 2.4rem 0 2.2rem;
+}
+
+.hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.5rem, 4vw, 2.6rem);
+    letter-spacing: 0.02em;
+    text-wrap: balance;
+    margin: 0;
+}
+
+.hero-subtitle {
+    margin-top: 0.5rem;
+    color: #e8d5b2;
+    font-size: clamp(0.92rem, 2vw, 1.05rem);
+}
+
+/* ================================================================
+   4c. GESTION_PERSONAJES — Panel y títulos
+   ================================================================ */
+.panel {
+    background: linear-gradient(180deg, #fbf7ee, #f8f1df);
+    border: 1px solid #d3c2a4;
+    border-radius: 16px;
+    padding: 1.4rem;
+    box-shadow: 0 14px 35px rgba(35,23,13,0.2);
+    animation: rise-in 0.55s ease-out;
+}
+
+@keyframes rise-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.35rem, 2.5vw, 1.95rem);
+    color: #3b2a1c;
+    margin: 0;
+}
+
+/* ================================================================
+   4d. GESTION_PERSONAJES — Botones
+   ================================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.62rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    color: #fff;
+}
+
+.btn:hover { transform: translateY(-1px); }
+
+.btn-primary {
+    background: linear-gradient(180deg, #c48a2d, #8b5f1d);
+    box-shadow: 0 4px 14px rgba(139,95,29,0.35);
+}
+
+.btn-success {
+    background: linear-gradient(180deg, #3f6a3f, #2f4f2f);
+    box-shadow: 0 4px 14px rgba(47,79,47,0.32);
+}
+
+.btn-danger {
+    background: linear-gradient(180deg, #9e2b20, #6d1e17);
+    box-shadow: 0 4px 14px rgba(109,30,23,0.3);
+}
+
+.btn-neutral {
+    background: linear-gradient(180deg, #7b6b57, #5f5242);
+    box-shadow: 0 4px 14px rgba(46,36,25,0.25);
+}
+
+.btn-sm {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+    border-radius: 6px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-group.actions { margin-top: 2rem; }
+
+/* ================================================================
+   4e. GESTION_PERSONAJES — Tablas
+   ================================================================ */
+.table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #d3c2a4;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fffdf7;
+}
+
+table th {
+    text-align: left;
+    padding: 0.9rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.03em;
+    color: #f8ead0;
+    background: linear-gradient(90deg, #5f3e27, #7a5432);
+}
+
+table td {
+    padding: 0.85rem 0.9rem;
+    border-bottom: 1px solid #eadfc8;
+    color: #2e2419;
+}
+
+tbody tr { transition: background-color 0.18s ease; }
+tbody tr:hover { background: #f6ecd8; }
+
+.empty-cell {
+    color: #5d4c37;
+    text-align: center;
+    font-style: italic;
+    padding: 1.5rem;
+    display: block;
+}
+
+/* ================================================================
+   4f. GESTION_PERSONAJES — Formularios
+   ================================================================ */
+form { margin-top: 0.5rem; }
+
+.form-group { margin-bottom: 1.5rem; }
+.form-group p { margin-bottom: 0.95rem; }
+
+label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+    color: #473423;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.01em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.72rem 0.78rem;
+    border: 1px solid #d7c7aa;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Nunito', sans-serif;
+    color: #2e2419;
+    background: #fffdf7;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #c48a2d;
+    box-shadow: 0 0 0 3px rgba(196,138,45,0.22);
+}
+
+textarea { resize: vertical; min-height: 120px; }
+
+.form-actions {
+    display: flex;
+    gap: 0.65rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+/* ================================================================
+   4g. GESTION_PERSONAJES — Razas cards
+   ================================================================ */
+.razas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.raza-card {
+    background: linear-gradient(180deg, #fbf7ee, #f8f1df);
+    border: 2px solid #d3c2a4;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 20px rgba(35,23,13,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.raza-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(196,138,45,0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.raza-card:hover::before { left: 100%; }
+.raza-card:hover {
+    transform: translateY(-8px);
+    border-color: #c48a2d;
+    box-shadow: 0 12px 28px rgba(196,138,45,0.2);
+}
+
+.raza-card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: #2e2419;
+    margin-bottom: 0.8rem;
+    border-bottom: 2px solid #c48a2d;
+    padding-bottom: 0.6rem;
+}
+
+.raza-card-desc {
+    color: #5d4c37;
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.stat-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, rgba(196,138,45,0.2), rgba(196,138,45,0.1));
+    border: 1px solid #c48a2d;
+    border-radius: 6px;
+    margin: 0.25rem;
+    font-weight: 600;
+    color: #8b5f1d;
+    font-size: 0.85rem;
+}
+
+.card-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ================================================================
+   4h. GESTION_PERSONAJES — Stats grid
+   ================================================================ */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat-input-group { display: flex; flex-direction: column; }
+.stat-input-group label { margin-bottom: 0.3rem; font-size: 0.9rem; }
+.stat-input-group input {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+/* ================================================================
+   4i. GESTION_PERSONAJES — Alertas (tema claro)
+   ================================================================ */
+.alert {
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid;
+    font-weight: 700;
+    animation: slide-in 0.3s ease-out;
+}
+
+@keyframes slide-in {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.alert-success {
+    border-color: #9bc79b;
+    background: #e9f6e9;
+    color: #2f5a2f;
+}
+
+.alert-danger {
+    border-color: #df9893;
+    background: #fbeceb;
+    color: #7f241d;
+}
+
+.alert-info {
+    border-color: #d7c18e;
+    background: #fff4da;
+    color: #5f4721;
+}
+
+/* ================================================================
+   4j. GESTION_PERSONAJES — Estado vacío
+   ================================================================ */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: #5d4c37;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+.empty-state h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #2e2419;
+}
+
+/* ================================================================
+   4k. GESTION_PERSONAJES — Confirmación
+   ================================================================ */
+.confirmation-panel {
+    background: linear-gradient(135deg, rgba(158,43,32,0.05), rgba(196,138,45,0.05));
+    border: 2px solid #9e2b20;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    animation: pulse-in 0.4s ease-out;
+}
+
+@keyframes pulse-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.confirmation-icon  { font-size: 3.5rem; margin-bottom: 1rem; color: #9e2b20; }
+
+.confirmation-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: #2e2419;
+    margin-bottom: 0.5rem;
+}
+
+.confirmation-text  { color: #5d4c37; margin-bottom: 2rem; line-height: 1.6; }
+
+.confirmation-item {
+    background: #f8ead0;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #9e2b20;
+}
+
+.confirmation-item-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: #2e2419;
+    margin-bottom: 0.3rem;
+}
+
+.warning-box {
+    border-left: 5px solid #9e2b20;
+    background: #fdf1f0;
+    border-radius: 10px;
+    padding: 0.9rem;
+    margin: 0.8rem 0;
+    color: #5f241f;
+}
+
+/* ================================================================
+   4l. GESTION_PERSONAJES — Footer
+   ================================================================ */
+footer {
+    margin-top: 2.4rem;
+    padding: 0;
+    background: #1f1914;
+    color: #f6e6c5;
+    border-top: 3px solid #c48a2d;
+}
+
+.footer-inner {
+    text-align: center;
+    padding: 1.2rem 0;
+    font-size: 0.9rem;
+}
+
+/* ================================================================
+   4m. GESTION_PERSONAJES — Responsive
+   ================================================================ */
+@media (max-width: 768px) {
+    .razas-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .title-row  { flex-direction: column; align-items: flex-start; }
+    .form-actions { justify-content: stretch; }
+    .form-actions .btn { width: 100%; }
+    table th, table td { font-size: 0.93rem; }
+}
+
+/* ================================================================
+   5a. USUARIOS — Scrollbar
+   ================================================================ */
+body:has(.dnd-container) ::-webkit-scrollbar       { width: 6px; }
+body:has(.dnd-container) ::-webkit-scrollbar-track { background: #0a0a0f; }
+body:has(.dnd-container) ::-webkit-scrollbar-thumb { background: #8b7536; border-radius: 3px; }
+
+/* ================================================================
+   5b. USUARIOS — Navbar
+   ================================================================ */
+.navbar {
+    background: linear-gradient(180deg, #150800 0%, #0a0500 100%) !important;
+    border-bottom: 2px solid #8b7536;
+    box-shadow: 0 2px 24px rgba(212,175,55,0.18);
+    padding: 0.875rem 0;
+}
+
+.navbar-brand {
+    color: #d4af37 !important;
+    font-family: 'Cinzel', serif;
+    font-size: 1.35rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-shadow: 0 0 12px rgba(212,175,55,0.45);
+    text-decoration: none;
+}
+.navbar-brand:hover { color: #f0d060 !important; }
+
+.nav-link {
+    color: #e8d5b7 !important;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.4rem 0.875rem !important;
+    border-radius: 3px;
+    transition: color 0.2s, background 0.2s;
+    text-decoration: none;
+}
+.nav-link:hover,
+.nav-link.active {
+    color: #d4af37 !important;
+    background: rgba(212,175,55,0.07);
+}
+
+.nav-auth-item   { margin-left: 0.35rem; }
+.nav-logout-form { margin: 0; }
+
+.nav-logout-btn,
+.nav-login-btn {
+    border: 1px solid #8b7536;
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem;
+    background: transparent;
+    color: #d4af37;
+    font: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.nav-logout-btn:hover,
+.nav-login-btn:hover {
+    background: rgba(212,175,55,0.12);
+    color: #f0d060;
+}
+
+/* ================================================================
+   5c. USUARIOS — Contenedor y layout
+   ================================================================ */
+.dnd-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+}
+
+.form-page { max-width: 580px; margin: 2rem auto; }
+
+.action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dnd-sep {
+    border: none;
+    border-top: 1px solid #2d2010;
+    margin: 1.5rem 0;
+}
+
+/* ================================================================
+   5d. USUARIOS — Cards
+   ================================================================ */
+.dnd-card {
+    background: #111827;
+    border: 1px solid #2d2010;
+    border-radius: 4px;
+    padding: 2rem 2.25rem;
+    position: relative;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(212,175,55,0.08);
+}
+.dnd-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #8b7536, transparent);
+}
+
+.dashboard-banner,
+.dashboard-side,
+.metric-card {
+    background: #111827;
+    border: 1px solid #2d2010;
+    border-radius: 8px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55);
+}
+
+.dashboard-banner { padding: 1.5rem; }
+.dashboard-side {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.metric-card { padding: 1rem; }
+
+.metric-value {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    line-height: 1;
+    color: #d4af37;
+    margin-bottom: 0.35rem;
+}
+
+.metric-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #9a8060;
+    font-family: 'Cinzel', serif;
+}
+
+/* ================================================================
+   5e. USUARIOS — Títulos y texto
+   ================================================================ */
+.dnd-title {
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+    font-size: 1.65rem;
+    font-weight: bold;
+    letter-spacing: 2.5px;
+    text-shadow: 0 0 18px rgba(212,175,55,0.25);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #2d2010;
+}
+
+.dashboard-kicker {
+    color: #8b7536;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 0.65rem;
+}
+
+.dashboard-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.65rem, 3vw, 2.35rem);
+    margin-bottom: 0.6rem;
+    color: #d4af37;
+}
+
+.dashboard-text { color: #e8d5b7; opacity: 0.8; max-width: 60ch; }
+.dashboard-note { font-size: 0.92rem; color: #9a8060; }
+.text-dim       { color: #9a8060; }
+
+.dashboard-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.1rem;
+}
+
+/* ================================================================
+   5f. USUARIOS — Action bar (override para dark)
+   ================================================================ */
+.dnd-container .action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* ================================================================
+   5g. USUARIOS — Tablas dnd-table
+   ================================================================ */
+.dnd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.dnd-table thead th {
+    background: linear-gradient(180deg, #1e0f00 0%, #140900 100%);
+    color: #8b7536;
+    padding: 0.8rem 1rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: normal;
+    border-bottom: 1px solid #8b7536;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.dnd-table tbody tr {
+    border-bottom: 1px solid rgba(45,32,16,0.6);
+    transition: background 0.15s;
+}
+.dnd-table tbody tr:hover      { background: rgba(212,175,55,0.04); }
+.dnd-table tbody tr:last-child { border-bottom: none; }
+
+.dnd-table tbody td {
+    padding: 0.8rem 1rem;
+    vertical-align: middle;
+    color: #e8d5b7;
+}
+
+/* ================================================================
+   5h. USUARIOS — Botones dnd-*
+   ================================================================ */
+.btn-dnd-primary {
+    background: linear-gradient(135deg, #4a2e0a 0%, #2d1b06 100%);
+    color: #d4af37;
+    border: 1px solid #8b7536;
+    padding: 0.55rem 1.375rem;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+.btn-dnd-primary:hover {
+    background: linear-gradient(135deg, #6a4e1a 0%, #4d3b16 100%);
+    color: #f0d060;
+    box-shadow: 0 0 16px rgba(212,175,55,0.25);
+    border-color: #d4af37;
+}
+
+.btn-dnd-secondary {
+    background: transparent;
+    color: #9a8060;
+    border: 1px solid #2d2010;
+    padding: 0.55rem 1.375rem;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+.btn-dnd-secondary:hover { color: #e8d5b7; border-color: #5a4020; }
+
+.btn-dnd-danger {
+    background: linear-gradient(135deg, #4a0e0e 0%, #2d0808 100%);
+    color: #f0a0a0;
+    border: 1px solid #6b2020;
+    padding: 0.55rem 1.375rem;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+.btn-dnd-danger:hover {
+    background: linear-gradient(135deg, #6a1e1e 0%, #4d1212 100%);
+    box-shadow: 0 0 14px rgba(139,26,26,0.4);
+    border-color: #a03030;
+}
+
+.btn-dnd-edit {
+    background: linear-gradient(135deg, #0c2040 0%, #081428 100%);
+    color: #7eb8f7;
+    border: 1px solid #1e4a80;
+    padding: 0.3rem 0.75rem;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.74rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 0.35rem;
+}
+.btn-dnd-edit:hover { background: linear-gradient(135deg, #1e4a80 0%, #122860 100%); color: #b0d8ff; }
+
+.btn-dnd-delete {
+    background: linear-gradient(135deg, #2a0c0c 0%, #180606 100%);
+    color: #f0a0a0;
+    border: 1px solid #4a1a1a;
+    padding: 0.3rem 0.75rem;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.74rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-dnd-delete:hover { background: linear-gradient(135deg, #4a2020 0%, #2d1010 100%); color: #ffb0b0; }
+
+/* ================================================================
+   5i. USUARIOS — Formularios dark (Bootstrap compatible)
+   ================================================================ */
+.form-label {
+    color: #8b7536;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.form-control,
+.form-select {
+    background-color: #080810 !important;
+    border: 1px solid #2d2010 !important;
+    color: #e8d5b7 !important;
+    border-radius: 3px !important;
+    padding: 0.6rem 0.875rem !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+}
+.form-control:focus,
+.form-select:focus {
+    background-color: #080810 !important;
+    border-color: #8b7536 !important;
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.12) !important;
+    color: #e8d5b7 !important;
+}
+.form-control::placeholder { color: #9a8060; opacity: 0.7; }
+.form-select option { background: #111827; color: #e8d5b7; }
+
+.invalid-feedback { color: #fca5a5; font-size: 0.8rem; }
+.form-text { color: #9a8060; font-size: 0.78rem; margin-top: 0.3rem; }
+
+/* ================================================================
+   5j. USUARIOS — Alertas dark
+   ================================================================ */
+.dnd-alert {
+    border-radius: 3px;
+    font-size: 0.88rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+}
+
+.dnd-alert-success {
+    background: #052e16;
+    border-color: #166534;
+    color: #6ee7b7;
+}
+
+.dnd-alert-danger {
+    background: #450a0a;
+    border-color: #7f1d1d;
+    color: #fca5a5;
+}
+
+.dnd-alert-warning {
+    background: #2d2200;
+    border-color: #6b5000;
+    color: #fde68a;
+}
+
+/* ================================================================
+   5k. USUARIOS — Badges de rol
+   ================================================================ */
+.badge-jugador,
+.badge-narrador,
+.badge-administrador {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.badge-jugador       { background: #0c2340; color: #7eb8f7; border: 1px solid #1e4a80; }
+.badge-narrador      { background: #1e0c40; color: #c09af0; border: 1px solid #4a2880; }
+.badge-administrador { background: #3a0c0c; color: #f0a0a0; border: 1px solid #803030; }
+
+.status-active   { color: #6ee7b7; font-size: 0.8rem; }
+.status-inactive { color: #fca5a5; font-size: 0.8rem; }
+
+/* ================================================================
+   5l. USUARIOS — Estado vacío dark
+   ================================================================ */
+.empty-icon {
+    font-size: 2.75rem;
+    margin-bottom: 1rem;
+    opacity: 0.45;
+}
+
+/* ================================================================
+   5m. USUARIOS — Delete box
+   ================================================================ */
+.delete-box {
+    background: rgba(127,29,29,0.08);
+    border: 1px solid rgba(127,29,29,0.25);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.delete-box .entity-name {
+    color: #d4af37;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+/* ================================================================
+   5n. USUARIOS — Dashboard layout
+   ================================================================ */
+.dashboard-hero {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: 1rem;
+    align-items: stretch;
+    margin-bottom: 1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.9rem;
+    margin: 1rem 0 0;
+}
+
+/* ================================================================
+   5o. USUARIOS — Auth
+   ================================================================ */
+.auth-shell {
+    min-height: calc(100vh - 220px);
+    display: grid;
+    place-items: center;
+    padding: 1.5rem 0 2rem;
+}
+
+.auth-card {
+    width: min(980px, 100%);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55);
+    border: 1px solid #2d2010;
+    background: #111827;
+}
+
+.auth-visual {
+    padding: 2rem;
+    background: linear-gradient(145deg, #3a1e0a 0%, #1a0d04 100%);
+    color: #e8d5b7;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    border-right: 1px solid #8b7536;
+}
+.auth-visual h2 { color: #d4af37; font-family: 'Cinzel', serif; font-size: 1.6rem; }
+.auth-visual p  { color: #e8d5b7; opacity: 0.8; }
+
+.auth-form-panel { padding: 2rem; }
+.auth-form-panel form { margin-top: 1rem; }
+
+.auth-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+}
+
+/* ================================================================
+   5p. USUARIOS — Footer
+   ================================================================ */
+.dnd-footer {
+    text-align: center;
+    color: #9a8060;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    padding: 1.5rem 0;
+    border-top: 1px solid #2d2010;
+    margin-top: 2rem;
+}
+
+/* ================================================================
+   5q. USUARIOS — Responsive
+   ================================================================ */
+@media (max-width: 768px) {
+    .dnd-container      { padding: 0 0.875rem 2rem; }
+    .dnd-card           { padding: 1.25rem 1rem; }
+    .dnd-table          { font-size: 0.78rem; }
+    .dnd-table thead th,
+    .dnd-table tbody td { padding: 0.55rem 0.5rem; }
+    .dnd-title          { font-size: 1.3rem; }
+    .action-bar         { flex-direction: column; align-items: flex-start; }
+    .form-page          { margin: 1rem auto; }
+    .dashboard-hero,
+    .auth-card,
+    .dashboard-grid     { grid-template-columns: 1fr; }
+    .dashboard-actions,
+    .auth-actions       { flex-direction: column; }
+}
+
+/* Filas tbody — aventureros y roles */
+.dnd-table tbody tr {
+    background-color: #1e2433 !important;
+}
+
+.dnd-table tbody tr:hover {
+    background-color: #252d40 !important;
+}
+
+.dnd-table tbody td {
+    color: #e8d5b7 !important;
+    border-bottom: 1px solid rgba(45,32,16,0.6) !important;
+}
