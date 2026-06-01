@@ -1,178 +1,129 @@
-# Portal D&D — Módulo de Usuarios y Gestión de Personajes
+# Portal D&D — Usuarios y Gestión de Personajes
 
-**Laboratorio de Software III · Avance No. 2 · GRUPO 1**  
-Plataforma colaborativa para juegos de rol Dungeons & Dragons.
-
----
-
-## Módulos implementados
-
-### Módulo 1 — Usuarios y Roles
-Gestión de usuarios con roles diferenciados:
-- **Jugador**: acceso básico a la plataforma
-- **Narrador**: gestión de partidas e historias
-- **Administrador**: control total del sistema
-
-### Módulo 2 — Gestión de Personajes
-Creación y administración de personajes D&D con atributos completos, razas y clases.
-
-### CRUDs entregados
-
-| # | CRUD | Modelo | Operaciones |
-|---|------|--------|-------------|
-| 1 | Gestión de Aventureros | `User` + `PerfilUsuario` | Crear · Listar · Editar · Eliminar |
-| 2 | Gestión de Roles | `Rol` | Crear · Listar · Editar · Eliminar |
-| 3 | Gestión de Personajes | `Personaje` | Crear · Listar · Ver detalle · Editar · Eliminar |
-| 4 | Gestión de Clases | `Clase` | Crear · Listar · Editar · Eliminar |
-| 5 | Gestión de Razas | `Raza` | Crear · Listar · Editar · Eliminar |
+**Laboratorio de Software III · Avance No. 2 · GRUPO 1**
 
 ---
 
-## Requisitos previos
+## CRUDs entregados
 
-- Python **3.12+**
-- **XAMPP** (MySQL/MariaDB activo en puerto 3306)
-- pip
+| # | CRUD | Acceso |
+|---|------|--------|
+| 1 | Gestión de Aventureros (`User` + `PerfilUsuario`) | Solo Administrador |
+| 2 | Gestión de Roles (`Rol`) | Todos los usuarios |
+| 3 | Gestión de Personajes (`Personaje`) | Todos los usuarios |
+| 4 | Gestión de Clases (`Clase`) | Todos los usuarios |
+| 5 | Gestión de Razas (`Raza`) | Todos los usuarios |
+
+Operaciones en cada CRUD: Crear · Listar · Ver detalle · Editar · Eliminar
+
+> Modelos adicionales en BD sin CRUD propio: `Habilidad`, `PersonajeHabilidad`, `SolicitudEdicionRol`.
 
 ---
 
-## Cómo abrir el proyecto desde cero
+## Requisitos
 
-### 1. Clonar el repositorio
+- Python **3.12+** · **XAMPP** (MySQL en puerto 3306) · pip
+
+---
+
+## Instalación
 
 ```bash
+# 1. Clonar
 git clone <URL_DEL_REPOSITORIO>
 cd dnd-auth
-```
 
-### 2. Crear y activar el entorno virtual
-
-```bash
-# Windows
+# 2. Entorno virtual
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Mac/Linux
 
-# Mac / Linux
-python -m venv venv
-source venv/bin/activate
-```
-
-### 3. Instalar dependencias
-
-```bash
+# 3. Dependencias
 pip install -r requirements.txt
 ```
 
-### 4. Configurar la base de datos en XAMPP
+---
 
-1. Abrir **XAMPP** → iniciar **Apache** y **MySQL**
-2. Ir a `http://localhost/phpmyadmin`
-3. Crear una base de datos con estos datos exactos:
+## Configurar la base de datos (XAMPP)
 
-| Campo | Valor |
-|-------|-------|
-| Nombre | `rpg_platform` |
-| Cotejamiento | `utf8mb4_unicode_ci` |
+> Conexión en `dnd_project/settings.py`: host `127.0.0.1`, puerto `3306`, usuario `root`, contraseña vacía.
 
-> La configuración de conexión en `dnd_project/settings.py` usa:
-> - Host: `127.0.0.1` · Puerto: `3306` · Usuario: `root` · Contraseña: *(vacía)*
+### Opción A — Importar el SQL exportado (recomendado)
 
-### 5. Aplicar migraciones
+Restaura todas las tablas con los datos existentes. **No necesitas correr migraciones después.**
+
+1. Inicia **Apache** y **MySQL** en XAMPP
+2. Ve a `http://localhost/phpmyadmin`
+3. Crea la base de datos: nombre `rpg_platform`, cotejamiento `utf8mb4_unicode_ci`
+4. Selecciona `rpg_platform` → pestaña **Importar** → elige `database_export.sql` → **Continuar**
+
+### Opción B — Base de datos vacía
+
+1. Crea la base de datos `rpg_platform` en phpMyAdmin (mismo cotejamiento)
+2. Ejecuta las migraciones:
 
 ```bash
 python manage.py migrate
 ```
 
-Esto crea automáticamente todas las tablas necesarias:
-- Tablas de Django (`auth_user`, `django_migrations`, etc.)
-- Tablas de usuarios: `usuarios_rol`, `usuarios_perfilusuario`
-- Tablas de personajes: `personaje`, `clase`, `raza`, `habilidad`, `personaje_habilidad`
-- Tablas colaborativas: `campania`, `npc`, `mision`, `sesion`, `turno`, `combate`, y más
+---
 
-### 6. (Opcional) Crear superusuario para el admin de Django
+## Ejecutar
 
 ```bash
+# (Opcional) Crear superusuario si la BD está vacía
 python manage.py createsuperuser
-```
 
-### 7. Ejecutar el servidor
-
-```bash
 python manage.py runserver
 ```
 
-Abrir en el navegador: `http://127.0.0.1:8000/`
+Abre `http://127.0.0.1:8000/` — redirige al dashboard o al login si no hay sesión.
 
 ---
 
-## URLs disponibles
+## Permisos por rol
 
-### Usuarios
-
-| Acción | URL |
-|--------|-----|
-| Listar todos los usuarios | `http://127.0.0.1:8000/usuarios/` |
-| Crear nuevo usuario | `http://127.0.0.1:8000/usuarios/crear/` |
-| Editar usuario | `http://127.0.0.1:8000/usuarios/<id>/editar/` |
-| Eliminar usuario | `http://127.0.0.1:8000/usuarios/<id>/eliminar/` |
-| Listar todos los roles | `http://127.0.0.1:8000/usuarios/roles/` |
-| Crear nuevo rol | `http://127.0.0.1:8000/usuarios/roles/crear/` |
-| Editar rol | `http://127.0.0.1:8000/usuarios/roles/<id>/editar/` |
-| Eliminar rol | `http://127.0.0.1:8000/usuarios/roles/<id>/eliminar/` |
-
-### Personajes
-
-| Acción | URL |
-|--------|-----|
-| Listar todos los personajes | `http://127.0.0.1:8000/personajes/` |
-| Crear nuevo personaje | `http://127.0.0.1:8000/personajes/crear/` |
-| Ver detalle de personaje | `http://127.0.0.1:8000/personajes/<id>/` |
-| Editar personaje | `http://127.0.0.1:8000/personajes/<id>/editar/` |
-| Eliminar personaje | `http://127.0.0.1:8000/personajes/<id>/eliminar/` |
-| Listar clases | `http://127.0.0.1:8000/personajes/clases/` |
-| Crear clase | `http://127.0.0.1:8000/personajes/clases/crear/` |
-| Editar clase | `http://127.0.0.1:8000/personajes/clases/editar/<id>/` |
-| Eliminar clase | `http://127.0.0.1:8000/personajes/clases/eliminar/<id>/` |
-| Listar razas | `http://127.0.0.1:8000/personajes/razas/` |
-| Crear raza | `http://127.0.0.1:8000/personajes/razas/crear/` |
-| Editar raza | `http://127.0.0.1:8000/personajes/razas/editar/<id>/` |
-| Eliminar raza | `http://127.0.0.1:8000/personajes/razas/eliminar/<id>/` |
-
-### General
-
-| | URL |
-|-|-----|
-| Página principal (redirige a usuarios) | `http://127.0.0.1:8000/` |
-| Panel de administración Django | `http://127.0.0.1:8000/admin/` |
+- **Cualquier usuario logueado**: ver usuarios, gestionar roles (excepto el rol "Administrador"), CRUD completo de personajes, clases y razas, ver y editar su perfil.
+- **Administrador** (o superuser): además puede crear, editar y eliminar usuarios, y gestionar el rol "Administrador".
+- **Registro público** (`/usuarios/registro/`): no permite elegir el rol "Administrador".
 
 ---
 
-## Stack tecnológico
+## URLs principales
+
+| Sección | URL |
+|---------|-----|
+| Login / Logout / Registro | `/usuarios/login/` · `/usuarios/logout/` · `/usuarios/registro/` |
+| Dashboard | `/usuarios/dashboard/` |
+| Mi perfil / Editar | `/usuarios/perfil/` · `/usuarios/perfil/editar/` |
+| Lista de usuarios | `/usuarios/` |
+| Detalle / Crear / Editar / Eliminar usuario | `/usuarios/<id>/` · `/usuarios/crear/` · `/usuarios/<id>/editar/` · `/usuarios/<id>/eliminar/` |
+| Dashboard admin de usuarios | `/usuarios/usuarios-dashboard/` |
+| Roles | `/usuarios/roles/` (crear: `/roles/crear/`) |
+| Personajes | `/personajes/` · `/personajes/inicio/` (dashboard) |
+| Clases | `/personajes/clases/` |
+| Razas | `/personajes/razas/` |
+| Admin Django | `/admin/` |
+
+---
+
+## Stack
 
 | Componente | Tecnología |
 |-----------|-----------|
-| Backend | Django 6.0.4 (Python 3.12+) |
-| Base de datos | MySQL/MariaDB via XAMPP + mysqlclient |
-| Frontend | Bootstrap 5 (CDN) + CSS personalizado temático D&D |
-| Autenticación | Sistema de auth nativo de Django |
-| Control de versiones | Git |
+| Backend | Django 6.0.4 + Python 3.12+ |
+| Base de datos | MySQL/MariaDB 10.6 via XAMPP + mysqlclient |
+| Frontend | Bootstrap 5 (CDN) + CSS temático D&D |
+| Auth | Django auth nativo + perfiles personalizados |
 
 ---
 
-## Flujo de demostración sugerido para la presentación
+## Problemas comunes
 
-**Módulo Usuarios:**
-1. Ir a `http://127.0.0.1:8000/usuarios/roles/` → crear los roles *Jugador*, *Narrador*, *Administrador*
-2. Ir a `http://127.0.0.1:8000/usuarios/` → crear dos usuarios asignándoles roles distintos
-3. Editar uno y cambiarle el rol
-4. Mostrar la confirmación de eliminación
-
-**Módulo Personajes:**
-1. Ir a `http://127.0.0.1:8000/personajes/clases/` → crear clases (ej: *Guerrero*, *Mago*, *Pícaro*)
-2. Ir a `http://127.0.0.1:8000/personajes/razas/` → crear razas (ej: *Humano*, *Elfo*, *Enano*)
-3. Ir a `http://127.0.0.1:8000/personajes/crear/` → crear un personaje asignado a un usuario
-4. Ver el detalle del personaje y sus atributos
-5. Editar el personaje y mostrar el cambio
+- **`Can't connect to MySQL server`** — verifica que MySQL esté corriendo en XAMPP (puerto 3306)
+- **`Unknown database 'rpg_platform'`** — crea la BD en phpMyAdmin con ese nombre exacto
+- **`No module named 'MySQLdb'`** — ejecuta `pip install mysqlclient`
+- **SQL no sube en phpMyAdmin** — aumenta `upload_max_filesize` y `post_max_size` a `64M` en `C:\xampp\php\php.ini` y reinicia Apache
 
 ---
 
@@ -180,21 +131,18 @@ Abrir en el navegador: `http://127.0.0.1:8000/`
 
 ```
 dnd-auth/
-├── dnd_project/          # Configuración global Django
-│   ├── settings.py
-│   └── urls.py
-├── usuarios/             # App: gestión de usuarios y roles
-│   ├── models.py         # Rol, PerfilUsuario
-│   ├── views.py          # CRUDs de usuarios y roles
-│   ├── forms.py
-│   ├── urls.py
+├── dnd_project/          # Configuración global (settings, urls)
+├── usuarios/             # App: auth, usuarios, roles
+│   ├── models.py         # Rol, PerfilUsuario, SolicitudEdicionRol
+│   ├── views.py
+│   ├── migrations/       # 3 migraciones
 │   └── templates/
-├── gestion_personajes/   # App: gestión de personajes D&D
-│   ├── models.py         # Personaje, Clase, Raza, Habilidad
-│   ├── views.py          # CRUDs de personajes, clases y razas
-│   ├── forms.py
-│   ├── urls.py
+├── gestion_personajes/   # App: personajes, clases, razas
+│   ├── models.py         # Personaje, Clase, Raza, Habilidad, PersonajeHabilidad
+│   ├── views.py
+│   ├── migrations/       # 3 migraciones
 │   └── templates/
+├── database_export.sql   # Dump completo de la BD (MariaDB 10.6)
 ├── manage.py
 └── requirements.txt
 ```
