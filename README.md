@@ -52,6 +52,8 @@ pip install -r requirements.txt
 
 Restaura todas las tablas con los datos existentes. **No necesitas correr migraciones después.**
 
+> `database_export.sql` está codificado en UTF-8 con tildes y eñes correctos (corregido en junio 2026).
+
 1. Inicia **Apache** y **MySQL** en XAMPP
 2. Ve a `http://localhost/phpmyadmin`
 3. Crea la base de datos: nombre `rpg_platform`, cotejamiento `utf8mb4_unicode_ci`
@@ -124,6 +126,7 @@ Abre `http://127.0.0.1:8000/` — redirige al dashboard o al login si no hay ses
 - **`Unknown database 'rpg_platform'`** — crea la BD en phpMyAdmin con ese nombre exacto
 - **`No module named 'MySQLdb'`** — ejecuta `pip install mysqlclient`
 - **SQL no sube en phpMyAdmin** — aumenta `upload_max_filesize` y `post_max_size` a `64M` en `C:\xampp\php\php.ini` y reinicia Apache
+- **Tildes y eñes aparecen como `??` en la BD** — ejecuta `fix_encoding.sql` en phpMyAdmin (selecciona `rpg_platform` → pestaña SQL → pega el contenido → Continuar)
 
 ---
 
@@ -142,7 +145,8 @@ dnd-auth/
 │   ├── views.py
 │   ├── migrations/       # 3 migraciones
 │   └── templates/
-├── database_export.sql   # Dump completo de la BD (MariaDB 10.6)
+├── database_export.sql   # Dump completo de la BD (MariaDB 10.6, UTF-8 corregido)
+├── fix_encoding.sql      # UPDATEs para corregir tildes/eñes en BD existente
 ├── manage.py
 └── requirements.txt
 ```
