@@ -89,7 +89,7 @@ def dashboard(request):
 
 @login_required
 def usuarios_lista(request):
-    usuarios = User.objects.select_related('perfil').all().order_by('username')
+    usuarios = User.objects.select_related('perfil').all().order_by('pk')
     return render(request, 'usuarios/usuarios/lista.html', {
         'usuarios': usuarios,
         'es_admin': _es_admin(request.user),
@@ -98,7 +98,7 @@ def usuarios_lista(request):
 
 @admin_requerido
 def usuarios_dashboard(request):
-    usuarios = User.objects.select_related('perfil').all().order_by('username')
+    usuarios = User.objects.select_related('perfil').all().order_by('pk')
     resumen = []
     for usuario in usuarios:
         perfil = getattr(usuario, 'perfil', None)
@@ -232,7 +232,7 @@ def usuario_eliminar(request, pk):
 
 @login_required
 def roles_lista(request):
-    roles = Rol.objects.all().order_by('nombre')
+    roles = Rol.objects.all().order_by('pk')
     return render(request, 'usuarios/roles/lista.html', {
         'roles': roles,
         'es_admin': _es_admin(request.user),
@@ -269,7 +269,8 @@ def rol_editar(request, pk):
             if nombre_nuevo.lower() == 'administrador' and not _es_admin(request.user):
                 messages.error(request, 'No puedes asignar el nombre "Administrador" a un rol.')
                 return render(request, 'usuarios/roles/editar.html', {'form': form, 'rol': rol})
-            form.save()
+            instance = form.save(commit=False)
+            instance.save(update_fields=['nombre', 'descripcion'])
             messages.success(request, f'Rol "{rol.nombre}" actualizado correctamente.')
             return redirect('usuarios:roles_lista')
     else:

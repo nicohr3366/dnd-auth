@@ -6,12 +6,12 @@ from django.utils import timezone
 class Rol(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField(blank=True)
-    fecha_creacion = models.DateTimeField(default=timezone.now, editable=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Rol'
         verbose_name_plural = 'Roles'
-        ordering = ['nombre']
+        ordering = ['pk']
 
     def __str__(self):
         return self.nombre

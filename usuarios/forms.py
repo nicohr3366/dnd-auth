@@ -80,24 +80,6 @@ class UsuarioEditarForm(forms.Form):
         return username
 
 
-class PortalAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(
-        label='Usuario',
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Escribe tu usuario',
-            'autofocus': True,
-        }),
-    )
-    password = forms.CharField(
-        label='Contraseña',
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Escribe tu contraseña',
-        }),
-    )
-
-
 class PerfilPropioForm(forms.Form):
     username = forms.CharField(
         max_length=150,
@@ -175,6 +157,11 @@ class RolForm(forms.ModelForm):
 
 
 class PortalAuthenticationForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': 'Usuario o contraseña incorrectos.',
+        'inactive': 'Esta cuenta está inactiva.',
+    }
+
     username = forms.CharField(
         label='Usuario',
         widget=forms.TextInput(attrs={
