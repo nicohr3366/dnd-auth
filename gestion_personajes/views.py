@@ -101,7 +101,12 @@ def personaje_delete(request, pk):
 @login_required
 def personaje_detail(request, pk):
     personaje = get_object_or_404(Personaje, pk=pk)
-    return render(request, 'crud_personajes/personaje_detail.html', {'personaje': personaje})
+    perfil = getattr(personaje.user, 'perfil', None)
+    rol_nombre = perfil.rol.nombre if (perfil and perfil.rol) else 'Sin rol'
+    return render(request, 'crud_personajes/personaje_detail.html', {
+        'personaje': personaje,
+        'rol_nombre': rol_nombre,
+    })
 
 
 @login_required
